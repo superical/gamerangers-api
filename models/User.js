@@ -17,17 +17,20 @@ const User = db.define('user', {
 	password: {
 		type: Sequelize.STRING
 	}
-}, {
-	getterMethods: {
-		generateJwt() {
-			const expiryDate = new Date((new Date()).getDate() + 0.5)
-			return jwt.sign({
-				id: this.getDataValue('id'),
-				email: this.getDataValue('email'),
-				exp: parseInt(expiryDate.getTime() / 1000, 10)
-			}, process.env.JWT_SECRET)
-		}
-	}
 })
+
+User.prototype.getAuthJson = function() {
+    const expiryDate = new Date()
+	expiryDate.setHours(expiryDate.getHours() + 1)
+    return {
+        id: this.getDataValue('id'),
+        email: this.getDataValue('email'),
+        token: jwt.sign({
+            id: this.getDataValue('id'),
+            email: this.getDataValue('email'),
+            exp: parseInt(expiryDate.getTime() / 1000)
+        }, process.env.JWT_SECRET)
+    }
+}
 
 module.exports = User

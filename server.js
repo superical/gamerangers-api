@@ -12,6 +12,7 @@ db.authenticate()
 const gamesRoute = require('./controllers/GameController')
 const newsRoute = require('./routes/news')
 const usersRoute = require('./controllers/UserController')
+require('./config/passport')
 
 const app = express()
 var host = "127.0.0.1";
@@ -35,7 +36,7 @@ app.use('/users', usersRoute)*/
 app.use('/', require('./routes/api'))
 
 app.use(function(err, req, res, next) {
-	console.error(err.name, err)
+	//console.error('name:', err.name, 'actual error:', err)
 	if (!err.statusCode) err.statusCode = 500
 	res.status(err.statusCode).json({error: err.message})
 });

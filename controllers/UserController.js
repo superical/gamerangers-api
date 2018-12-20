@@ -30,10 +30,11 @@ const login = (req, res, next) => {
 	return passport.authenticate('local', {session: false}, (err, passportUser, info) => {
 		if(err) next(err)
 		if(passportUser) {
-			const user = passportUser
-			user.token = passportUser.generateJWT()
-		}
-	})
+			return res.status(200).json({authentication: passportUser.getAuthJson()})
+		} else {
+            throw new StatusCodeError('Authentication error.', 400)
+        }
+	})(req, res, next)
 }
 
 /*
@@ -135,5 +136,6 @@ const remove = (req, res) => {
 }*/
 
 module.exports = {
-	create
+	create,
+    login
 }

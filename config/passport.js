@@ -8,10 +8,12 @@ passport.use(new LocalStrategy({
 	passwordField: 'password',
 	session: false
 }, (username, password, done) => {
-	User.findOne({where: {email: username}})
+	User.findOne({where: {
+		email: username
+	}})
 		.then(user => {
-			if(!user) return done(new StatusCodeError('Invalid account.', 401), false)
-			if(user.password !== password) return done(new StatusCodeError('Invalid email and password combination.', 401), false)
+			if(!user) return done(new StatusCodeError('Invalid account.', 400), false)
+			if(user.password !== password) return done(new StatusCodeError('Invalid email and password combination.', 400), false)
 			return done(null, user)
 		})
 		.catch(done)
