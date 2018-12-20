@@ -1,8 +1,7 @@
-const route = require('express').Router()
 const Game = require('../models/Game')
 const StatusCodeError = require('../helpers/StatusCodeError')
 
-route.get('/', (req, res, next) => {
+const index = (req, res, next) => {
 	Game.findAll()
 		.then(games => {
 			res.status(200).json({
@@ -10,18 +9,18 @@ route.get('/', (req, res, next) => {
 			})
 		})
 		.catch(err => next(err))
-})
+}
 
-route.get('/:gameid', (req, res, next) => {
+const viewById = (req, res, next) => {
 	Game.findOne({where: {id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID.', 404)
 			return res.status(200).json({data: game})
 		})
 		.catch(err => next(err))
-})
+}
 
-route.post('/', (req, res, next) => {
+const create = (req, res, next) => {
     if(!('description' in req.body)) {
 	    throw new StatusCodeError('The description field is missing.', 422)
     }
@@ -39,9 +38,9 @@ route.post('/', (req, res, next) => {
 		    })
 	    })
 	    .catch(err => next(err))
-})
+}
 
-route.patch('/:gameid', (req, res, next) => {
+const update = (req, res, next) => {
 	const acceptedFields = ['main_image', 'title', 'release_date', 'developer', 'trailer_youtube', 'description']
 	Game.findOne({where: {id: req.params.gameid}})
 		.then(game => {
@@ -54,9 +53,9 @@ route.patch('/:gameid', (req, res, next) => {
 				.then(() => res.status(200).json({data: game}))
 		})
 		.catch(err => next(err))
-})
+}
 
-route.delete('/:gameid', (req, res, next) => {
+const remove = (req, res, next) => {
 	Game.findOne({where: {id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID to delete.', 404)
@@ -64,6 +63,12 @@ route.delete('/:gameid', (req, res, next) => {
 		})
 		.then(() => res.sendStatus(204))
 		.catch(err => next(err))
-})
+}
 
-module.exports = route
+module.exports = {
+	index,
+	viewById,
+	create,
+	update,
+	remove
+}
