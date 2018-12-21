@@ -1,13 +1,33 @@
 const route = require('express').Router()
 const sha256 = require('sha256')
 const passport = require('passport')
-const db = require('../helpers/db-connection')
-const User = require('../models/User')
+const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateRequestParams = require('../helpers/validateRequestParams')
 
+const index = (req, res, next) => {
+	User.findAll()
+		.then(users => {
+			res.status(200).json({data: users})
+		})
+		.catch(next)
+}
+
+const currentUser = (req, res, next) => {
+	User.findOne({where: {
+		email: req.auth.email,
+		id: req.auth.id
+	}})
+		.then(user => {
+			if(!user) throw new StatusCodeError('Current user is invalid.', 400)
+			user.password = undefined
+			res.status(200).json({data: user})
+		})
+		.catch(next)
+}
+
 const create = (req, res, next) => {
-    const requiredFields = ['first_name', 'last_name', 'email', 'password']
+	const requiredFields = ['first_name', 'last_name', 'email', 'password']
 	validateRequestParams(requiredFields, req.body)
 
     User.findOne({where: {email: req.body.email}})
@@ -35,6 +55,25 @@ const login = (req, res, next) => {
             throw new StatusCodeError('Authentication error.', 400)
         }
 	})(req, res, next)
+}
+
+const update = (req, res, next) => {
+	const acceptedFields = ['first_name', 'last_name', 'email']
+
+	User.findOne({where: {id: req.params.userid}})
+		.then(user => {
+			if(!user) throw new StatusCodeError('Cannot find account.', 404)
+			Object.keys(req.body).forEach(paramName => {
+				if(acceptedFields.indexOf(paramName) > -1)
+					user[paramName] = req.body[paramName]
+			})
+			return user.save(acceptedFields)
+				.then(() => {
+					user.password = undefined
+					res.status(200).json({data: user})
+				})
+		})
+		.catch(err => next(err))
 }
 
 /*
@@ -136,6 +175,9 @@ const remove = (req, res) => {
 }*/
 
 module.exports = {
+	index,
+	currentUser,
 	create,
-    login
+    login,
+	update
 }

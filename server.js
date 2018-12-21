@@ -3,6 +3,9 @@ const path = require('path')
 const bodyparser = require('body-parser')
 const session = require('express-session')
 const passport = require('passport')
+const passportConfig = require('./config/passport')
+
+passport.use(passportConfig.localStrategy)
 
 const db = require('./helpers/db-connection')
 db.authenticate()
@@ -12,7 +15,7 @@ db.authenticate()
 const gamesRoute = require('./controllers/GameController')
 const newsRoute = require('./routes/news')
 const usersRoute = require('./controllers/UserController')
-require('./config/passport')
+
 
 const app = express()
 var host = "127.0.0.1";
@@ -21,9 +24,7 @@ var port = 8080;
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(session({
-	secret: 'my-secret-key'
-}))
+app.use(passport.initialize());
 
 app.get('/', function(req, res) {
     res.send('hello3');
@@ -36,7 +37,7 @@ app.use('/users', usersRoute)*/
 app.use('/', require('./routes/api'))
 
 app.use(function(err, req, res, next) {
-	//console.error('name:', err.name, 'actual error:', err)
+	console.error('name:', err.name, 'actual error:', err)
 	if (!err.statusCode) err.statusCode = 500
 	res.status(err.statusCode).json({error: err.message})
 });

@@ -1,4 +1,6 @@
 const jwt = require('express-jwt')
+const passport = require('passport')
+const StatusCodeError = require('../helpers/StatusCodeError')
 
 const getTokenFromHeader = req => {
 	const { headers: { authorization } } = req
