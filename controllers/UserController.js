@@ -1,6 +1,3 @@
-const route = require('express').Router()
-const sha256 = require('sha256')
-const passport = require('passport')
 const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateRequestParams = require('../helpers/validateRequestParams')
@@ -44,19 +41,6 @@ const create = (req, res, next) => {
         .catch(next)
 }
 
-const login = (req, res, next) => {
-	validateRequestParams(['email', 'password'], req.body)
-
-	return passport.authenticate('local', {session: false}, (err, passportUser, info) => {
-		if(err) next(err)
-		if(passportUser) {
-			return res.status(200).json({authentication: passportUser.getAuthJson()})
-		} else {
-            throw new StatusCodeError('Authentication error.', 400)
-        }
-	})(req, res, next)
-}
-
 const update = (req, res, next) => {
 	const acceptedFields = ['first_name', 'last_name', 'email']
 
@@ -91,7 +75,6 @@ module.exports = {
 	index,
 	currentUser,
 	create,
-    login,
 	update,
 	remove
 }

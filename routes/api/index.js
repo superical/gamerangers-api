@@ -8,17 +8,10 @@ router.get('/', (req, res) => {
 	})
 })
 
-const GameController = require('../../controllers/GameController')
-router.route('/games')
-	.get(GameController.index)
-	.post(GameController.create)
-
-router.route('/games/:gameid')
-	.get(GameController.viewById)
-	.patch(GameController.update)
-	.delete(GameController.remove)
-
+router.use('/games', require('./games'))
 router.use('/users', require('./users'))
 router.use('/reviews', require('./reviews'))
+
+router.use('/auth', require('./authentication'))
 
 module.exports = router

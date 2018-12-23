@@ -24,7 +24,7 @@ const User = (db, DataType) => {
 		}
 	})
 
-	Model.prototype.getAuthJson = function() {
+	Model.prototype.getAuthObject = function() {
 		const expiryDate = new Date()
 		expiryDate.setHours(expiryDate.getHours() + 1)
 		return {

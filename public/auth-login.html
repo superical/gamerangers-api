@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authenticating...</title>
+</head>
+<body>
+<button id="login">Login with Google</button>
+<p>
+    <strong>Login Status</strong><br/>
+    <div id="status">Not logged in.</div>
+</p>
+<script type="text/javascript">
+    window.authCallback = authObj => {
+    	console.log(authObj)
+    	document.querySelector('#status').innerHTML = `<pre>user id: ${authObj.id}\nemail: ${authObj.email}\ntoken: ${authObj.token}</pre>`
+    }
+	document.querySelector('#login').addEventListener('click', evt => {
+		window.open('/auth/google')
+    })
+</script>
+</body>
+</html>
