@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Authenticating...</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            window.opener.authCallback({
+                id: '{{user_id}}',
+                email: '{{email}}',
+                token: '{{token}}'
+            });
+            window.close();
+        </script>
+    </body>
+</html>
