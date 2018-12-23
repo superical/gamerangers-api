@@ -1,33 +1,44 @@
-const Sequelize = require('sequelize').default
 const jwt = require('jsonwebtoken')
-const db = require('../helpers/db-connection')
 
-const DataType = Sequelize.DataTypes
+const User = (db, DataType) => {
+	const Model = db.define('user', {
+		user_id: {
+			type: DataType.INTEGER,
+			primaryKey: true,
+			autoIncrement: true
+		},
+		first_name: {
+			type: DataType.STRING
+		},
+		last_name: {
+			type: DataType.STRING
+		},
+		email: {
+			type: DataType.STRING
+		},
+		password: {
+			type: DataType.STRING
+		},
+		isAdmin: {
+			type: DataType.BOOLEAN
+		}
+	})
 
-const User = db.define('user', {
-	first_name: {
-		type: DataType.STRING
-	},
-	last_name: {
-		type: DataType.STRING
-	},
-	email: {
-		type: DataType.STRING
-	},
-	password: {
-		type: Sequelize.STRING
-	}
-}, {
-	getterMethods: {
-		generateJwt() {
-			const expiryDate = new Date((new Date()).getDate() + 0.5)
-			return jwt.sign({
-				id: this.getDataValue('id'),
+	Model.prototype.getAuthJson = function() {
+		const expiryDate = new Date()
+		expiryDate.setHours(expiryDate.getHours() + 1)
+		return {
+			id: this.getDataValue('user_id'),
+			email: this.getDataValue('email'),
+			token: jwt.sign({
+				id: this.getDataValue('user_id'),
 				email: this.getDataValue('email'),
-				exp: parseInt(expiryDate.getTime() / 1000, 10)
+				isAdmin: this.getDataValue('isAdmin'),
+				exp: parseInt(expiryDate.getTime() / 1000)
 			}, process.env.JWT_SECRET)
 		}
 	}
-})
+	return Model
+}
 
 module.exports = User
