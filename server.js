@@ -4,7 +4,7 @@ const bodyparser = require('body-parser')
 const passport = require('passport')
 const passportConfig = require('./config/passport')
 
-const db = require('./helpers/db-connection')
+const db = require('./helpers/dbConnection')
 db.authenticate()
 	.then(() => console.log('Database connection has been established successfully.'))
 	.catch(err => console.error('Unable to connect to the database:', err))

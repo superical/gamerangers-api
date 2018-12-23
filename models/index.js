@@ -1,4 +1,4 @@
-const sequelize = require('../helpers/db-connection')
+const sequelize = require('../helpers/dbConnection')
 
 const User = sequelize.import(__dirname + '/User.js')
 const Review = sequelize.import(__dirname + '/Review.js')

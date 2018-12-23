@@ -1,5 +1,5 @@
 const route = require('express').Router()
-const db = require('../helpers/db-connection')
+const db = require('../helpers/dbConnection')
 
 route.get('/', (req, res) => {
     const sql = 'select * from latest_news order by date_posted desc'
