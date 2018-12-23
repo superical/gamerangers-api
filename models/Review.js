@@ -1,5 +1,10 @@
 const Review = (db, DataType) => {
-	return db.define('review', {
+	const Model = db.define('review', {
+		review_id: {
+			type: DataType.INTEGER,
+			primaryKey: true,
+			autoIncrement: true
+		},
 		content: {
 			type: DataType.TEXT
 		},
@@ -13,6 +18,8 @@ const Review = (db, DataType) => {
 			type: DataType.INTEGER
 		}
 	})
+
+	return Model
 }
 
 module.exports = Review

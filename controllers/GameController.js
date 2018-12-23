@@ -1,5 +1,6 @@
-const Game = require('../models/Game')
+const Game = require('../models').Game
 const StatusCodeError = require('../helpers/StatusCodeError')
+const validateParams = require('../helpers/validateRequestParams')
 
 const index = (req, res, next) => {
 	Game.findAll()
@@ -8,22 +9,22 @@ const index = (req, res, next) => {
 				data: games.map(game => game)
 			})
 		})
-		.catch(err => next(err))
+		.catch(next)
 }
 
 const viewById = (req, res, next) => {
-	Game.findOne({where: {id: req.params.gameid}})
+	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID.', 404)
 			return res.status(200).json({data: game})
 		})
-		.catch(err => next(err))
+		.catch(next)
 }
 
 const create = (req, res, next) => {
-    if(!('description' in req.body)) {
-	    throw new StatusCodeError('The description field is missing.', 422)
-    }
+	const acceptedParams = ['main_image', 'title', 'release_date', 'developer', 'trailer_youtube', 'description']
+    validateParams(acceptedParams, req.body)
+
     Game.create({
 	    main_image: req.body.main_image,
 	    title: req.body.title,
@@ -37,12 +38,12 @@ const create = (req, res, next) => {
 			    data: game.dataValues
 		    })
 	    })
-	    .catch(err => next(err))
+	    .catch(next)
 }
 
 const update = (req, res, next) => {
 	const acceptedFields = ['main_image', 'title', 'release_date', 'developer', 'trailer_youtube', 'description']
-	Game.findOne({where: {id: req.params.gameid}})
+	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID to update.', 404)
 			Object.keys(req.body).forEach(paramName => {
@@ -52,17 +53,17 @@ const update = (req, res, next) => {
 			return game.save(acceptedFields)
 				.then(() => res.status(200).json({data: game}))
 		})
-		.catch(err => next(err))
+		.catch(next)
 }
 
 const remove = (req, res, next) => {
-	Game.findOne({where: {id: req.params.gameid}})
+	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID to delete.', 404)
 			return game.destroy()
 		})
 		.then(() => res.sendStatus(204))
-		.catch(err => next(err))
+		.catch(next)
 }
 
 module.exports = {

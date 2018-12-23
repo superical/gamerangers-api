@@ -4,7 +4,8 @@ const User = (db, DataType) => {
 	const Model = db.define('user', {
 		user_id: {
 			type: DataType.INTEGER,
-			primaryKey: true
+			primaryKey: true,
+			autoIncrement: true
 		},
 		first_name: {
 			type: DataType.STRING
@@ -17,8 +18,12 @@ const User = (db, DataType) => {
 		},
 		password: {
 			type: DataType.STRING
+		},
+		isAdmin: {
+			type: DataType.BOOLEAN
 		}
 	})
+
 	Model.prototype.getAuthJson = function() {
 		const expiryDate = new Date()
 		expiryDate.setHours(expiryDate.getHours() + 1)
@@ -28,6 +33,7 @@ const User = (db, DataType) => {
 			token: jwt.sign({
 				id: this.getDataValue('user_id'),
 				email: this.getDataValue('email'),
+				isAdmin: this.getDataValue('isAdmin'),
 				exp: parseInt(expiryDate.getTime() / 1000)
 			}, process.env.JWT_SECRET)
 		}

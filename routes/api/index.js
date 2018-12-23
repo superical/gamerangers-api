@@ -19,17 +19,6 @@ router.route('/games/:gameid')
 	.delete(GameController.remove)
 
 router.use('/users', require('./users'))
-
-/*router.route('/users')
-	/!*.get(UserController.index)*!/
-	.post(UserController.create)*/
-
-/*router.route('/:userid')
-	/!*.get(UserController.viewById)*!/
-	.patch(UserController.update)
-	.delete(UserController.remove)
-
-router.route('/:userid/password')
-	.patch(UserController.updatePassword)*/
+router.use('/reviews', require('./reviews'))
 
 module.exports = router

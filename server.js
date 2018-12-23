@@ -24,6 +24,7 @@ var port = 8080;
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(require('./middlewares/authenticate').optional)
 app.use(passport.initialize());
 
 app.get('/', function(req, res) {
@@ -38,6 +39,7 @@ app.use('/', require('./routes/api'))
 
 app.use(function(err, req, res, next) {
 	console.error('name:', err.name, 'actual error:', err)
+	// console.error('Error:', err.message)
 	if (!err.statusCode) err.statusCode = 500
 	res.status(err.statusCode).json({error: err.message})
 });
