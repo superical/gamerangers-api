@@ -5,6 +5,8 @@ router.route('/')
 	.get(GameController.index)
 	.post(GameController.create)
 
+router.get('/trending', GameController.trending)
+
 router.route('/:gameid')
 	.get(GameController.viewById)
 	.patch(GameController.update)

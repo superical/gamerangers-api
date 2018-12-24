@@ -1,9 +1,21 @@
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 const Game = require('../models').Game
+const SearchFrequency = require('../models').SearchFrequency
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
 
 const index = (req, res, next) => {
-	Game.findAll()
+	Game.findAll({where: Object.keys(req.query).length === 0 ? undefined : {
+			[Op.or]: [
+				req.query.title ? {title: {[Op.like]: `%${req.query.title}%`}} : undefined,
+				req.query.developer ? {developer: {[Op.like]: `%${req.query.developer}%`}} : undefined
+			]
+		}})
+		.then(games => {
+			if(Object.keys(req.query).length > 0) games.forEach(game => SearchFrequency.create({game_id: game.game_id}))
+			return games
+		})
 		.then(games => {
 			res.status(200).json({
 				data: games.map(game => game)
@@ -35,7 +47,7 @@ const create = (req, res, next) => {
     })
 	    .then(game => {
 	    	res.status(201).json({
-			    data: game.dataValues
+			    data: game
 		    })
 	    })
 	    .catch(next)
@@ -66,10 +78,38 @@ const remove = (req, res, next) => {
 		.catch(next)
 }
 
+const trending = (req, res, next) => {
+	const whereCreatedAt = {}
+	if(req.query.date_from && !req.query.date_to) {
+		whereCreatedAt[Op.gte] = req.query.date_from
+	} else if(!req.query.date_from && req.query.date_to) {
+		console.log(req.query.date_to)
+		whereCreatedAt[Op.lte] = req.query.date_to
+	} else {
+		whereCreatedAt[Op.and] = [
+			{[Op.gte]: req.query.date_from},
+			{[Op.lte]: req.query.date_to}
+		]
+	}
+	SearchFrequency.findAll({
+		where: {
+			createdAt: whereCreatedAt
+		},
+		group: 'game_id',
+		attributes: ['game_id', [Sequelize.fn('COUNT', Sequelize.col('*')), 'frequency']],
+		order: [[Sequelize.fn('COUNT', Sequelize.col('*')), 'DESC']],
+		limit: req.query.limit ? parseInt(req.query.limit) : undefined,
+		include: [{model: Game}]
+	})
+		.then(frequencies => res.status(200).json({data: frequencies}))
+		.catch(next)
+}
+
 module.exports = {
 	index,
 	viewById,
 	create,
 	update,
-	remove
+	remove,
+	trending
 }
