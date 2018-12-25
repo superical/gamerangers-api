@@ -3,7 +3,6 @@ const Op = Sequelize.Op
 const Favourite = require('../models').Favourite
 const Game = require('../models').Game
 const User = require('../models').User
-const SearchFrequency = require('../models').SearchFrequency
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
 
@@ -44,7 +43,8 @@ const viewById = (req, res, next) => {
 const viewByUserId = (req, res, next) => {
 	Favourite.findAll({
 		where: {user_id: req.params.userid},
-		include: modelsIncluded
+		include: modelsIncluded,
+		order: [['createdAt', 'DESC']]
 	})
 		.then(favourite => {
 			if(!favourite) throw new StatusCodeError('Cannot find favourite ID.', 404)
@@ -59,7 +59,7 @@ const createReplace = (req, res, next) => {
 
 	Game.findOne({where: {game_id: req.body.game_id}})
 		.then(game => {
-			if(!game) throw new StatusCodeError('Invalid game ID to add to favourites.', 400)
+			if(!game) throw new StatusCodeError('Invalid game ID to add to favourites.', 409)
 			return game
 		})
 		.then(() => Favourite.findOne({where: {game_id: req.body.game_id, user_id: req.params.userid}})
