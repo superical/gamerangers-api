@@ -6,7 +6,7 @@ const SearchFrequency = (db, DataType) => {
 				autoIncrement: true
 			},
 			game_id: {
-				type: DataType.TEXT
+				type: DataType.INTEGER
 			}
 		},
 		{

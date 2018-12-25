@@ -1,5 +1,6 @@
 const jwt = require('express-jwt')
 const StatusCodeError = require('../helpers/StatusCodeError')
+const User = require('../models').User
 
 const getTokenFromHeader = req => {
 	const { headers: { authorization } } = req
@@ -28,7 +29,8 @@ const isUserAdmin = (req, res, next) => {
 	next()
 }
 
-const isOwnerOf = (model, modelIdParamName, paramType = 'params') => (err, req, res, next) => {
+const isOwnerOf = (model = User, modelIdParamName = 'userid', paramType = 'params') => (err, req, res, next) => {
+	if(!req.auth) return next(new StatusCodeError('Invalid logged in user.', 403))
 	if(!model) return next()
 	model.findOne({where: {[model.primaryKeyAttribute]: req[paramType][modelIdParamName]}})
 		.then(record => {
@@ -45,12 +47,13 @@ const isOwnerOf = (model, modelIdParamName, paramType = 'params') => (err, req, 
 }
 
 const composeJwt = jwtConfigObj => [jwt(jwtConfigObj), authErrorHandler]
-const composeJwtAndSelf = (requestedModel, modelIdParamName, paramType = 'params') => [jwt(jwtConfig), isUserAdmin, isOwnerOf(requestedModel, modelIdParamName, paramType),  authErrorHandler]
+const composeJwtAndSelf = (requestedModel = User, modelIdParamName = 'userid', paramType = 'params') => [jwt(jwtConfig), isUserAdmin, isOwnerOf(requestedModel, modelIdParamName, paramType),  authErrorHandler]
 const composeJwtAndAdmin = [jwt(jwtConfig), isUserAdmin, authErrorHandler]
 
 module.exports = {
 	required: composeJwt(jwtConfig),
 	optional: composeJwt({...jwtConfig, credentialsRequired: false}),
-	self: composeJwtAndSelf,
+	self: composeJwtAndSelf(),
+	selfOf: composeJwtAndSelf,
 	adminOnly: composeJwtAndAdmin
 }
