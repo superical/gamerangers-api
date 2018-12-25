@@ -82,22 +82,22 @@ const remove = (req, res, next) => {
 }
 
 const trending = (req, res, next) => {
-	const whereCreatedAt = {}
+	const where = {}
+	const createdAt = {}
 	if(req.query.date_from && !req.query.date_to) {
-		whereCreatedAt[Op.gte] = req.query.date_from
+		createdAt[Op.gte] = req.query.date_from
 	} else if(!req.query.date_from && req.query.date_to) {
 		console.log(req.query.date_to)
-		whereCreatedAt[Op.lte] = req.query.date_to
-	} else {
-		whereCreatedAt[Op.and] = [
+		createdAt[Op.lte] = req.query.date_to
+	} else if(req.query.date_from && req.query.date_to) {
+		createdAt[Op.and] = [
 			{[Op.gte]: req.query.date_from},
 			{[Op.lte]: req.query.date_to}
 		]
 	}
+	if(Object.getOwnPropertySymbols(createdAt).length > 0) where.createdAt = createdAt
 	SearchFrequency.findAll({
-		where: Object.keys(whereCreatedAt).length === 0 ? undefined : {
-			createdAt: whereCreatedAt
-		},
+		where: where,
 		group: 'game_id',
 		attributes: ['game_id', [Sequelize.fn('COUNT', Sequelize.col('*')), 'frequency']],
 		order: [[Sequelize.fn('COUNT', Sequelize.col('*')), 'DESC']],
