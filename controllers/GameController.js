@@ -7,13 +7,13 @@ const validateParams = require('../helpers/validateRequestParams')
 
 const index = (req, res, next) => {
 	Game.findAll({where: Object.keys(req.query).length === 0 ? undefined : {
-			[Op.or]: [
+			[Op.and]: [
 				req.query.title ? {title: {[Op.like]: `%${req.query.title}%`}} : undefined,
 				req.query.developer ? {developer: {[Op.like]: `%${req.query.developer}%`}} : undefined
 			]
 		}})
 		.then(games => {
-			if(Object.keys(req.query).length > 0) games.forEach(game => SearchFrequency.create({game_id: game.game_id}))
+			if(Object.keys(req.query).length > 1 && req.query.search === 'true') games.forEach(game => SearchFrequency.create({game_id: game.game_id}))
 			return games
 		})
 		.then(games => {
@@ -92,7 +92,7 @@ const trending = (req, res, next) => {
 		]
 	}
 	SearchFrequency.findAll({
-		where: {
+		where: Object.keys(whereCreatedAt).length === 0 ? undefined : {
 			createdAt: whereCreatedAt
 		},
 		group: 'game_id',
