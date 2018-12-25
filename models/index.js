@@ -4,6 +4,7 @@ const User = sequelize.import(__dirname + '/User.js')
 const Review = sequelize.import(__dirname + '/Review.js')
 const Game = sequelize.import(__dirname + '/Game.js')
 const SearchFrequency = sequelize.import(__dirname + '/SearchFrequency.js')
+const News = sequelize.import(__dirname + '/News.js')
 
 User.hasOne(User, {foreignKey: 'user_id'})
 User.hasMany(Review, {foreignKey: 'user_id', sourceKey: 'user_id', onDelete: 'cascade', hooks: true})     //foreignkey: on Reviews, sourceKey: on User
@@ -19,5 +20,6 @@ module.exports = {
 	Review,
 	User,
 	Game,
-	SearchFrequency
+	SearchFrequency,
+	News
 }

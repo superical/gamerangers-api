@@ -6,7 +6,7 @@ const index = (req, res, next) => {
 	Review.findAll()
 		.then(reviews => {
 			res.status(200).json({
-				data: reviews.map(game => game)
+				data: reviews.map(review => review)
 			})
 		})
 		.catch(err => next(err))
