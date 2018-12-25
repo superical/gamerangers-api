@@ -3,9 +3,12 @@ const StatusCodeError = require('../helpers/StatusCodeError')
 const validateRequestParams = require('../helpers/validateRequestParams')
 
 const index = (req, res, next) => {
-	User.findAll()
+	User.findAll({order: [['createdAt', 'DESC']]})
 		.then(users => {
-			res.status(200).json({data: users})
+			res.status(200).json({data: users.map(user => {
+					user.password = undefined
+					return user
+				})})
 		})
 		.catch(next)
 }

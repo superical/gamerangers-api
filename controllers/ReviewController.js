@@ -1,9 +1,18 @@
+const Op = require('sequelize').Op
 const Review = require('../models').Review
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
 
 const index = (req, res, next) => {
-	Review.findAll()
+	Review.findAll({
+		where: Object.keys(req.query).length === 0 ? undefined : {
+			[Op.and]: [
+				req.query.game_id ? {game_id: {[Op.eq]: req.query.game_id}} : undefined,
+				req.query.user_id ? {user_id: {[Op.eq]: req.query.user_id}} : undefined
+			]
+		},
+		order: [['createdAt', 'DESC']]
+	})
 		.then(reviews => {
 			res.status(200).json({
 				data: reviews.map(review => review)

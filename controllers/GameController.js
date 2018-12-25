@@ -6,12 +6,15 @@ const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
 
 const index = (req, res, next) => {
-	Game.findAll({where: Object.keys(req.query).length === 0 ? undefined : {
+	Game.findAll({
+		where: Object.keys(req.query).length === 0 ? undefined : {
 			[Op.and]: [
 				req.query.title ? {title: {[Op.like]: `%${req.query.title}%`}} : undefined,
 				req.query.developer ? {developer: {[Op.like]: `%${req.query.developer}%`}} : undefined
 			]
-		}})
+		},
+		order: [['createdAt', 'DESC']]
+	})
 		.then(games => {
 			if(Object.keys(req.query).length > 1 && req.query.search === 'true') games.forEach(game => SearchFrequency.create({game_id: game.game_id}))
 			return games
