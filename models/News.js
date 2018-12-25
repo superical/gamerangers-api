@@ -6,10 +6,10 @@ const News = (db, DataType) => {
 			autoIncrement: true
 		},
 		headline: {
-			type: DataType.TEXT
+			type: DataType.STRING
 		},
 		content: {
-			type: DataType.INTEGER
+			type: DataType.TEXT
 		}
     },
     {
