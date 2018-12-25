@@ -29,6 +29,7 @@ const isUserAdmin = (req, res, next) => {
 }
 
 const isOwnerOf = (model, modelIdParamName, paramType = 'params') => (err, req, res, next) => {
+	if(!req.auth) return next(new StatusCodeError('Invalid logged in user.', 403))
 	if(!model) return next()
 	model.findOne({where: {[model.primaryKeyAttribute]: req[paramType][modelIdParamName]}})
 		.then(record => {
