@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
 router.use('/games', require('./games'))
 router.use('/users', require('./users'))
 router.use('/reviews', require('./reviews'))
+router.use('/news', require('./news'))
 
 router.use('/auth', require('./authentication'))
 
