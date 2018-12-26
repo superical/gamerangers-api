@@ -40,34 +40,41 @@ const viewById = (req, res, next) => {
 		.catch(next)
 }
 
-const viewByUserId = (req, res, next) => {
+const _viewAllByUserId = userId =>
 	Favourite.findAll({
-		where: {user_id: req.params.userid},
+		where: {user_id: userId},
 		include: modelsIncluded,
 		order: [['createdAt', 'DESC']]
 	})
-		.then(favourite => {
-			if(!favourite) throw new StatusCodeError('Cannot find favourite ID.', 404)
-			return res.status(200).json({data: favourite})
+		.then(favourites => {
+			return favourites
 		})
+
+const viewAllByCurrentUserId = (req, res, next) => {
+	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
+	_viewAllByUserId(req.auth.id)
+		.then(favourites => res.status(200).json({data: favourites}))
 		.catch(next)
 }
 
-const createReplace = (req, res, next) => {
-	const acceptedParams = ['game_id']
-	validateParams(acceptedParams, req.body)
+const viewAllByUserId = (req, res, next) => {
+	_viewAllByUserId(req.params.userid)
+		.then(favourites => res.status(200).json({data: favourites}))
+		.catch(next)
+}
 
-	Game.findOne({where: {game_id: req.body.game_id}})
+const _createReplace = (userId, gameId) =>
+	Game.findOne({where: {game_id: gameId}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Invalid game ID to add to favourites.', 409)
 			return game
 		})
-		.then(() => Favourite.findOne({where: {game_id: req.body.game_id, user_id: req.params.userid}})
+		.then(() => Favourite.findOne({where: {game_id: gameId, user_id: userId}})
 			.then(favourite => {
 				if(favourite) return favourite
 				return Favourite.create({
-					user_id: req.params.userid,
-					game_id: req.body.game_id
+					user_id: userId,
+					game_id: gameId
 				})
 			})
 		)
@@ -81,7 +88,33 @@ const createReplace = (req, res, next) => {
 					}
 				})
 		})
+
+const createReplaceByUserIdGameId = (req, res, next) => {
+	const acceptedParams = ['game_id', 'user_id']
+	validateParams(acceptedParams, req.body)
+	_createReplace(req.body.user_id, req.body.game_id)
 		.then(data => res.status(201).json({data}))
+		.catch(next)
+}
+
+const createReplaceByCurrentUserIdGameId = (req, res, next) => {
+	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
+	_createReplace(req.auth.id, req.param.gameid)
+		.then(data => res.status(201).json({data}))
+		.catch(next)
+}
+
+const _removeByUserIdGameId = (userId, gameId) =>
+	Favourite.findOne({where: {user_id: userId, game_id: gameId}})
+		.then(favourite => {
+			if(!favourite) throw new StatusCodeError('Cannot find favourite to delete.', 404)
+			return favourite.destroy()
+		})
+
+const removeByCurrentUserId = (req, res, next) => {
+	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
+	_removeByUserIdGameId(req.auth.id, req.params.gameid)
+		.then(() => res.sendStatus(204))
 		.catch(next)
 }
 
@@ -95,21 +128,13 @@ const remove = (req, res, next) => {
 		.catch(next)
 }
 
-const removeByGameFavId = (req, res, next) => {
-	Favourite.findOne({where: {game_id: req.params.gameid, user_id: req.params.userid}})
-		.then(favourite => {
-			if(!favourite) throw new StatusCodeError('Cannot find game ID from favourites to delete.', 404)
-			return favourite.destroy()
-		})
-		.then(() => res.sendStatus(204))
-		.catch(next)
-}
-
 module.exports = {
 	index,
 	viewById,
-	viewByUserId,
-	createReplace,
+	viewAllByCurrentUserId,
+	viewAllByUserId,
+	createReplaceByUserIdGameId,
+	createReplaceByCurrentUserIdGameId,
 	remove,
-	removeByGameFavId
+	removeByCurrentUserId
 }
