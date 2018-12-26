@@ -66,8 +66,13 @@ const viewAllByUserId = (req, res, next) => {
 const _createReplace = (userId, gameId) =>
 	Game.findOne({where: {game_id: gameId}})
 		.then(game => {
-			if(!game) throw new StatusCodeError('Invalid game ID to add to favourites.', 409)
+			if(!game) throw new StatusCodeError('Invalid game ID to add to favourites.', 404)
 			return game
+		})
+		.then(() => User.findOne({where: {user_id: userId}}))
+		.then(user => {
+			if(!user) throw new StatusCodeError('Invalid user ID to add favourites.', 404)
+			return user
 		})
 		.then(() => Favourite.findOne({where: {game_id: gameId, user_id: userId}})
 			.then(favourite => {
@@ -99,7 +104,7 @@ const createReplaceByUserIdGameId = (req, res, next) => {
 
 const createReplaceByCurrentUserIdGameId = (req, res, next) => {
 	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
-	_createReplace(req.auth.id, req.param.gameid)
+	_createReplace(req.auth.id, req.params.gameid)
 		.then(data => res.status(201).json({data}))
 		.catch(next)
 }
