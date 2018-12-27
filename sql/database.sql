@@ -28,15 +28,15 @@ CREATE TABLE `favourites` (
   `favourite_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `game_id` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`favourite_id`),
   UNIQUE KEY `favourite_id_UNIQUE` (`favourite_id`),
   KEY `user_favourites_fk_idx` (`user_id`),
   KEY `favourites_games_fk_idx` (`game_id`),
   CONSTRAINT `favourites_games_fk` FOREIGN KEY (`game_id`) REFERENCES `games` (`game_id`),
   CONSTRAINT `favourites_users_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,11 +54,11 @@ CREATE TABLE `games` (
   `developer` varchar(100) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `trailer_youtube` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`game_id`),
   UNIQUE KEY `game_id_UNIQUE` (`game_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,8 +72,8 @@ CREATE TABLE `latest_news` (
   `news_id` int(11) NOT NULL AUTO_INCREMENT,
   `headline` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `content` text COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`news_id`),
   UNIQUE KEY `news_id_UNIQUE` (`news_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
@@ -92,8 +92,8 @@ CREATE TABLE `reviews` (
   `game_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `rating` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`review_id`),
   UNIQUE KEY `review_id_UNIQUE` (`review_id`),
   KEY `user_id_idx` (`user_id`),
@@ -113,13 +113,13 @@ DROP TABLE IF EXISTS `search_frequency`;
 CREATE TABLE `search_frequency` (
   `searchfreq_id` int(11) NOT NULL AUTO_INCREMENT,
   `game_id` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`searchfreq_id`),
   UNIQUE KEY `_id_UNIQUE` (`searchfreq_id`),
   KEY `searchfreq_games_fk_idx` (`game_id`),
   CONSTRAINT `searchfreq_games_fk` FOREIGN KEY (`game_id`) REFERENCES `games` (`game_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,8 +136,8 @@ CREATE TABLE `users` (
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
@@ -160,4 +160,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-24  0:36:35
+-- Dump completed on 2018-12-26 17:29:09
