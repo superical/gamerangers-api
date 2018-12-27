@@ -40,7 +40,10 @@ const create = (req, res, next) => {
                 password: req.body.password
             })
         })
-        .then(user => res.status(201).json({data: user}))
+        .then(user => {
+			user.password = undefined
+			res.status(201).json({data: user})
+		})
         .catch(next)
 }
 
