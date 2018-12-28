@@ -2,6 +2,7 @@ const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateRequestParams = require('../helpers/validateRequestParams')
 
+
 const index = (req, res, next) => {
 	User.findAll({order: [['createdAt', 'DESC']]})
 		.then(users => {
@@ -66,6 +67,38 @@ const update = (req, res, next) => {
 		.catch(next)
 }
 
+const _changePassword = (userId, newPassword) => {
+	return User.findOne({where: {user_id: userId}})
+		.then(user => {
+			if(!user) throw new StatusCodeError('Cannot find account', 404)
+			user.password = newPassword
+			return user.save(['password'])
+		})
+}
+
+const changePasswordByUserId = (req, res, next) => {
+	const acceptedFields = ['password']
+	validateRequestParams(acceptedFields, req.body)
+
+	_changePassword(req.params.userid, req.body.password)
+		.then(user => {
+			user.password = undefined
+			res.status(200).json({data: user})
+		})
+}
+
+const changePasswordByCurrentUserId = (req, res, next) => {
+	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
+	const acceptedFields = ['password']
+	validateRequestParams(acceptedFields, req.body)
+
+	_changePassword(req.auth.id, req.body.password)
+		.then(user => {
+			user.password = undefined
+			res.status(200).json({data: user})
+		})
+}
+
 const remove = (req, res, next) => {
 	validateRequestParams(['userid'], req.params)
 	User.findOne({where: {user_id: req.params.userid}})
@@ -82,5 +115,7 @@ module.exports = {
 	currentUser,
 	create,
 	update,
+	changePasswordByUserId,
+	changePasswordByCurrentUserId,
 	remove
 }

@@ -9,6 +9,7 @@ router.get('/', UserController.index)
 router.post('/', UserController.create)
 
 router.get('/current', auth.required, UserController.currentUser)
+router.put('/current/password', auth.required, UserController.changePasswordByCurrentUserId)
 router.get('/current/favourites', auth.required, FavouriteController.viewAllByCurrentUserId)
 router.put('/current/favourites/:gameid', auth.required, FavouriteController.createReplaceByCurrentUserIdGameId)
 router.delete('/current/favourites/:gameid', auth.required, FavouriteController.removeByCurrentUserId)
@@ -16,6 +17,8 @@ router.delete('/current/favourites/:gameid', auth.required, FavouriteController.
 router.get('/:userid/favourites', auth.self, FavouriteController.viewAllByUserId)
 
 router.get('/:userid/reviews', auth.self, ReviewController.viewByUserId)
+
+router.put('/:userid/password', auth.self, UserController.changePasswordByUserId)
 
 router.patch('/:userid', auth.self, UserController.update)
 router.delete('/:userid', auth.adminOnly, UserController.remove)
