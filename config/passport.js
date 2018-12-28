@@ -17,7 +17,7 @@ const localStrategy = new LocalStrategy({
 	}})
 		.then(user => {
 			if(!user) return done(new StatusCodeError('Invalid account.', 400), false)
-			if(user.password !== password) return done(new StatusCodeError('Invalid email and password combination.', 400), false)
+			if(user.password !== sha256(password)) return done(new StatusCodeError('Invalid email and password combination.', 400), false)
 			return done(null, user)
 		})
 		.catch(done)

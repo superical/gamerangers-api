@@ -1,7 +1,7 @@
 const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
-const validateRequestParams = require('../helpers/validateRequestParams')
-
+const validateParams = require('../helpers/validateRequestParams')
+const sha256 = require('sha256')
 
 const index = (req, res, next) => {
 	User.findAll({order: [['createdAt', 'DESC']]})
@@ -29,7 +29,7 @@ const currentUser = (req, res, next) => {
 
 const create = (req, res, next) => {
 	const requiredFields = ['first_name', 'last_name', 'email', 'password']
-	validateRequestParams(requiredFields, req.body)
+	validateParams(requiredFields, req.body)
 
     User.findOne({where: {email: req.body.email}})
         .then(user => {
@@ -38,7 +38,7 @@ const create = (req, res, next) => {
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 email: req.body.email,
-                password: req.body.password
+                password: sha256(req.body.password)
             })
         })
         .then(user => {
@@ -71,14 +71,14 @@ const _changePassword = (userId, newPassword) => {
 	return User.findOne({where: {user_id: userId}})
 		.then(user => {
 			if(!user) throw new StatusCodeError('Cannot find account', 404)
-			user.password = newPassword
+			user.password = sha256(newPassword)
 			return user.save(['password'])
 		})
 }
 
 const changePasswordByUserId = (req, res, next) => {
 	const acceptedFields = ['password']
-	validateRequestParams(acceptedFields, req.body)
+	validateParams(acceptedFields, req.body)
 
 	_changePassword(req.params.userid, req.body.password)
 		.then(user => {
@@ -90,7 +90,7 @@ const changePasswordByUserId = (req, res, next) => {
 const changePasswordByCurrentUserId = (req, res, next) => {
 	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
 	const acceptedFields = ['password']
-	validateRequestParams(acceptedFields, req.body)
+	validateParams(acceptedFields, req.body)
 
 	_changePassword(req.auth.id, req.body.password)
 		.then(user => {
@@ -100,7 +100,7 @@ const changePasswordByCurrentUserId = (req, res, next) => {
 }
 
 const remove = (req, res, next) => {
-	validateRequestParams(['userid'], req.params)
+	validateParams(['userid'], req.params)
 	User.findOne({where: {user_id: req.params.userid}})
 		.then(user => {
 			if(!user) throw new StatusCodeError('Cannot find user ID to delete.', 404)
