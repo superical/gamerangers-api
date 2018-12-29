@@ -4,6 +4,7 @@ const Game = require('../models').Game
 const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
+const resOutput = require('../helpers/responseOutput')
 
 const userAttributes = ['user_id', 'first_name', 'last_name', 'email', 'isAdmin', 'createdAt', 'updatedAt']
 const modelsIncluded = [{model: Game}, {model: User, attributes: userAttributes}]
@@ -20,9 +21,7 @@ const index = (req, res, next) => {
 		include: modelsIncluded
 	})
 		.then(reviews => {
-			res.status(200).json({
-				data: reviews.map(review => review)
-			})
+			res.status(200).json(resOutput.jsonData(reviews))
 		})
 		.catch(err => next(err))
 }
@@ -36,7 +35,7 @@ const viewById = (req, res, next) => {
 			if(!review) throw new StatusCodeError('Cannot find review.', 404)
 			return review
 		})
-		.then(review => res.status(200).json({data: review}))
+		.then(review => res.status(200).json(resOutput.jsonData(review)))
 		.catch(next)
 }
 
@@ -46,7 +45,7 @@ const viewByUserId = (req, res, next) => {
 		include: modelsIncluded,
 		order: [['createdAt', 'DESC']]
 	})
-		.then(reviews => res.status(200).json({data: reviews}))
+		.then(reviews => res.status(200).json(resOutput.jsonData(reviews)))
 		.catch(next)
 }
 
@@ -56,7 +55,7 @@ const viewByGameId = (req, res, next) => {
 		include: modelsIncluded,
 		order: [['createdAt', 'DESC']]
 	})
-		.then(reviews => res.status(200).json({data: reviews}))
+		.then(reviews => res.status(200).json(resOutput.jsonData(reviews)))
 		.catch(next)
 }
 
@@ -91,7 +90,7 @@ const create = (req, res, next) => {
 					}
 				})
 		})
-		.then(data => res.status(201).json({data}))
+		.then(data => res.status(201).json(resOutput.jsonData(data)))
 		.catch(next)
 }
 
@@ -108,7 +107,7 @@ const update = (req, res, next) => {
 			})
 			return review.save(acceptedParams)
 		})
-		.then(review => res.status(200).json({data: review}))
+		.then(review => res.status(200).json(resOutput.jsonData(review)))
 		.catch(next)
 }
 

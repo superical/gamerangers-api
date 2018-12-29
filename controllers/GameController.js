@@ -4,6 +4,7 @@ const Game = require('../models').Game
 const SearchFrequency = require('../models').SearchFrequency
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
+const resOutput = require('../helpers/responseOutput')
 
 const index = (req, res, next) => {
 	Game.findAll({
@@ -20,9 +21,7 @@ const index = (req, res, next) => {
 			return games
 		})
 		.then(games => {
-			res.status(200).json({
-				data: games.map(game => game)
-			})
+			res.status(200).json(resOutput.jsonData(games))
 		})
 		.catch(next)
 }
@@ -31,7 +30,7 @@ const viewById = (req, res, next) => {
 	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID.', 404)
-			return res.status(200).json({data: game})
+			return res.status(200).json(resOutput.jsonData(game))
 		})
 		.catch(next)
 }
@@ -48,11 +47,7 @@ const create = (req, res, next) => {
 	    trailer_youtube: req.body.trailer_youtube,
 	    description: req.body.description
     })
-	    .then(game => {
-	    	res.status(201).json({
-			    data: game
-		    })
-	    })
+	    .then(game => res.status(201).json(resOutput.jsonData(game)))
 	    .catch(next)
 }
 
@@ -66,7 +61,7 @@ const update = (req, res, next) => {
 					game[paramName] = req.body[paramName]
 			})
 			return game.save(acceptedFields)
-				.then(() => res.status(200).json({data: game}))
+				.then(() => res.status(200).json(resOutput.jsonData(game)))
 		})
 		.catch(next)
 }
@@ -104,7 +99,7 @@ const trending = (req, res, next) => {
 		limit: req.query.limit ? parseInt(req.query.limit) : undefined,
 		include: [{model: Game}]
 	})
-		.then(frequencies => res.status(200).json({data: frequencies}))
+		.then(frequencies => res.status(200).json(resOutput.jsonData(frequencies)))
 		.catch(next)
 }
 

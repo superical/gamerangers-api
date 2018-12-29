@@ -5,6 +5,7 @@ const Game = require('../models').Game
 const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
+const resOutput = require('../helpers/responseOutput')
 
 const userAttributes = ['user_id', 'first_name', 'last_name', 'email', 'isAdmin', 'createdAt', 'updatedAt']
 const modelsIncluded = [{model: Game}, {model: User, attributes: userAttributes}]
@@ -21,9 +22,7 @@ const index = (req, res, next) => {
 		include: modelsIncluded
 	})
 		.then(favourites => {
-			res.status(200).json({
-				data: favourites.map(favourite => favourite)
-			})
+			res.status(200).json(resOutput.jsonData(favourites))
 		})
 		.catch(next)
 }
@@ -35,7 +34,7 @@ const viewById = (req, res, next) => {
 	})
 		.then(favourite => {
 			if(!favourite) throw new StatusCodeError('Cannot find favourite ID.', 404)
-			return res.status(200).json({data: favourite})
+			return res.status(200).json(resOutput.jsonData(favourite))
 		})
 		.catch(next)
 }
@@ -53,13 +52,13 @@ const _viewAllByUserId = userId =>
 const viewAllByCurrentUserId = (req, res, next) => {
 	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
 	_viewAllByUserId(req.auth.id)
-		.then(favourites => res.status(200).json({data: favourites}))
+		.then(favourites => res.status(200).json(resOutput.jsonData(favourites)))
 		.catch(next)
 }
 
 const viewAllByUserId = (req, res, next) => {
 	_viewAllByUserId(req.params.userid)
-		.then(favourites => res.status(200).json({data: favourites}))
+		.then(favourites => res.status(200).json(resOutput.jsonData(favourites)))
 		.catch(next)
 }
 
@@ -98,14 +97,14 @@ const createReplaceByUserIdGameId = (req, res, next) => {
 	const acceptedParams = ['game_id', 'user_id']
 	validateParams(acceptedParams, req.body)
 	_createReplace(req.body.user_id, req.body.game_id)
-		.then(data => res.status(201).json({data}))
+		.then(data => res.status(201).json(resOutput.jsonData(data)))
 		.catch(next)
 }
 
 const createReplaceByCurrentUserIdGameId = (req, res, next) => {
 	if(!req.auth) throw new StatusCodeError('You are currently not logged in to perform this action.', 403)
 	_createReplace(req.auth.id, req.params.gameid)
-		.then(data => res.status(201).json({data}))
+		.then(data => res.status(201).json(resOutput.jsonData(data)))
 		.catch(next)
 }
 
