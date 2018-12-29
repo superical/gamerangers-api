@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const offsetDateTime = require('../helpers/time').offsetDateTime
 
 const User = (db, DataType) => {
 	const Model = db.define('user', {
@@ -21,6 +22,18 @@ const User = (db, DataType) => {
 		},
 		isAdmin: {
 			type: DataType.BOOLEAN
+		},
+		createdAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('createdAt'))
+			},
+		},
+		updatedAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('updatedAt'))
+			},
 		}
 	})
 

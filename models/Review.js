@@ -1,3 +1,5 @@
+const offsetDateTime = require('../helpers/time').offsetDateTime
+
 const Review = (db, DataType) => {
 	const Model = db.define('review', {
 		review_id: {
@@ -25,6 +27,18 @@ const Review = (db, DataType) => {
 					args: [5],
 					msg: 'Maximum rating must be less than 5.'
 				},
+			}
+		},
+		createdAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('createdAt'))
+			}
+		},
+		updatedAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('updatedAt'))
 			}
 		}
 	})
