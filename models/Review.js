@@ -15,7 +15,17 @@ const Review = (db, DataType) => {
 			type: DataType.INTEGER
 		},
 		rating: {
-			type: DataType.INTEGER
+			type: DataType.INTEGER,
+			validate: {
+				min: {
+					args: [0],
+					msg: 'Minimum rating must be at least 0.'
+				},
+				max: {
+					args: [5],
+					msg: 'Maximum rating must be less than 5.'
+				},
+			}
 		}
 	})
 
