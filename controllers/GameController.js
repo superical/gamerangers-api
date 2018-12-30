@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const Game = require('../models').Game
@@ -66,6 +68,43 @@ const update = (req, res, next) => {
 		.catch(next)
 }
 
+const setOrUpdateMainImage = (req, res, next) => {
+	const gameId = req.params.gameid
+	Game.findByPk(gameId)
+		.then(game => {
+			if(!game) throw new StatusCodeError('Invalid game ID to set image.', 404)
+			return game
+		})
+		.then(game => {
+			const acceptedContentTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+			if(acceptedContentTypes.indexOf(req.headers['content-type']) === -1) throw new StatusCodeError('Invalid content-type. You must specify a content type of jpg, png or gif only.', 400)
+
+			const file = new Buffer(req.body, 'base64')
+			const contentType = req.headers['content-type']
+			let fileType = contentType.split('/')[1]
+			if(fileType === 'jpeg') fileType = 'jpg'
+			const filename = `${gameId}.${fileType}`
+			const fileDest = path.resolve(path.join('public', 'images', 'games', filename))
+
+			const stream = fs.createWriteStream(fileDest)
+			stream.once('open', fd => {
+				stream.write(file)
+				stream.end()
+			})
+
+			stream.on('close', () => {
+				const oldImageDest = path.resolve(path.join('public', 'images', 'games', game.main_image))
+				if(game.main_image !== filename && fs.existsSync(oldImageDest))
+					fs.unlinkSync(oldImageDest)
+
+				game.main_image = filename
+				return game.save()
+					.then(game => res.status(200).json(resOutput.jsonData(game)))
+			})
+		})
+		.catch(next)
+}
+
 const remove = (req, res, next) => {
 	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
@@ -108,6 +147,7 @@ module.exports = {
 	viewById,
 	create,
 	update,
+	setOrUpdateMainImage,
 	remove,
 	trending
 }
