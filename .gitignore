@@ -81,3 +81,4 @@ typings/
 
 .idea/
 public/images/games/*
+!public/images/games/no-image.jpg

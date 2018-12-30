@@ -9,9 +9,11 @@ db.authenticate()
 	.then(() => console.log('Database connection has been established successfully.'))
 	.catch(err => console.error('Unable to connect to the database:', err))
 
+const pathsConfig = require('./config/paths')
+
 const app = express()
-const host = "127.0.0.1";
-const port = 8080;
+const host = pathsConfig.SERVER_HOSTNAME;
+const port = pathsConfig.SERVER_PORT;
 
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: false}))

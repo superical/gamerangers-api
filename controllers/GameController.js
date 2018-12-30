@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { URL } = require('url')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const Game = require('../models').Game
@@ -7,6 +8,7 @@ const SearchFrequency = require('../models').SearchFrequency
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
 const resOutput = require('../helpers/responseOutput')
+const pathsConfig = require('../config/paths')
 
 const index = (req, res, next) => {
 	Game.findAll({
@@ -22,9 +24,7 @@ const index = (req, res, next) => {
 			if(Object.keys(req.query).length > 1 && req.query.search === 'true') games.forEach(game => SearchFrequency.create({game_id: game.game_id}))
 			return games
 		})
-		.then(games => {
-			res.status(200).json(resOutput.jsonData(games))
-		})
+		.then(games => res.status(200).json(resOutput.jsonData(games)))
 		.catch(next)
 }
 
@@ -38,11 +38,11 @@ const viewById = (req, res, next) => {
 }
 
 const create = (req, res, next) => {
-	const acceptedParams = ['main_image', 'title', 'release_date', 'developer', 'trailer_youtube', 'description']
+	const acceptedParams = ['title', 'release_date', 'developer', 'trailer_youtube', 'description']
     validateParams(acceptedParams, req.body)
 
     Game.create({
-	    main_image: req.body.main_image,
+	    main_image: null,
 	    title: req.body.title,
 	    release_date: req.body.release_date,
 	    developer: req.body.developer,
@@ -54,7 +54,7 @@ const create = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
-	const acceptedFields = ['main_image', 'title', 'release_date', 'developer', 'trailer_youtube', 'description']
+	const acceptedFields = ['title', 'release_date', 'developer', 'trailer_youtube', 'description']
 	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
 			if(!game) throw new StatusCodeError('Cannot find game ID to update.', 404)
@@ -84,7 +84,7 @@ const setOrUpdateMainImage = (req, res, next) => {
 			let fileType = contentType.split('/')[1]
 			if(fileType === 'jpeg') fileType = 'jpg'
 			const filename = `${gameId}.${fileType}`
-			const fileDest = path.resolve(path.join('public', 'images', 'games', filename))
+			const fileDest = path.resolve(path.join('public', pathsConfig.GAME_IMAGES_DIR, filename))
 
 			const stream = fs.createWriteStream(fileDest)
 			stream.once('open', fd => {
@@ -93,10 +93,12 @@ const setOrUpdateMainImage = (req, res, next) => {
 			})
 
 			stream.on('close', () => {
-				const oldImageDest = path.resolve(path.join('public', 'images', 'games', game.main_image))
-				if(game.main_image !== filename && fs.existsSync(oldImageDest))
-					fs.unlinkSync(oldImageDest)
-
+				const oldImageUrl = new URL(game.main_image)
+				if(path.basename(oldImageUrl.pathname) !== pathsConfig.GAMES_NO_IMAGE_FILE) {
+					const oldImagePath = path.resolve(path.join('public', oldImageUrl.pathname))
+					if (path.basename(oldImageUrl.pathname) !== filename && fs.existsSync(oldImagePath))
+						fs.unlinkSync(oldImagePath)
+				}
 				game.main_image = filename
 				return game.save()
 					.then(game => res.status(200).json(resOutput.jsonData(game)))
