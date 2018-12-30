@@ -17,6 +17,7 @@ const port = pathsConfig.SERVER_PORT;
 
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: false}))
+app.use(require('./middlewares/cors'))
 
 app.engine('html', require('mustache-express')());
 app.set('view engine', 'mustache');
