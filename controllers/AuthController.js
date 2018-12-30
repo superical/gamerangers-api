@@ -10,7 +10,6 @@ const googleAuthCallback = (req, res, next) => {
 	passport.authenticate('google', {session: false}, (err, passportUser, info) => {
 		if(err) throw err
 		if(passportUser) {
-			//res.redirect('/')
 			const authObj = passportUser.getAuthObject()
 			res.render('auth-callback.html', {
 				user_id: authObj.id,

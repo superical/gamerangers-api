@@ -1,3 +1,5 @@
+const offsetDateTime = require('../helpers/time').offsetDateTime
+
 const News = (db, DataType) => {
 	const Model = db.define('news', {
 		news_id: {
@@ -10,6 +12,18 @@ const News = (db, DataType) => {
 		},
 		content: {
 			type: DataType.TEXT
+		},
+		createdAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('createdAt'))
+			},
+		},
+		updatedAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('updatedAt'))
+			},
 		}
     },
     {

@@ -1,3 +1,5 @@
+const offsetDateTime = require('../helpers/time').offsetDateTime
+
 const Game = (db, DataType) => {
 	const Model = db.define('game', {
 		game_id: {
@@ -22,6 +24,18 @@ const Game = (db, DataType) => {
 		},
 		description: {
 			type: DataType.TEXT
+		},
+		createdAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('createdAt'))
+			},
+		},
+		updatedAt: {
+			type: DataType.DATE,
+			get() {
+				return offsetDateTime(this.getDataValue('updatedAt'))
+			},
 		}
 	})
 

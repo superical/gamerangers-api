@@ -1,15 +1,17 @@
+const sha256 = require('sha256')
 const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
-const sha256 = require('sha256')
+const resOutput = require('../helpers/responseOutput')
 
 const index = (req, res, next) => {
 	User.findAll({order: [['createdAt', 'DESC']]})
 		.then(users => {
-			res.status(200).json({data: users.map(user => {
-					user.password = undefined
-					return user
-				})})
+			const data = users.map(user => {
+				user.password = undefined
+				return user
+			})
+			res.status(200).json(resOutput.jsonData(data))
 		})
 		.catch(next)
 }
@@ -22,7 +24,7 @@ const currentUser = (req, res, next) => {
 		.then(user => {
 			if(!user) throw new StatusCodeError('Current user is invalid.', 400)
 			user.password = undefined
-			res.status(200).json({data: user})
+			res.status(200).json(resOutput.jsonData(user))
 		})
 		.catch(next)
 }
@@ -43,7 +45,7 @@ const create = (req, res, next) => {
         })
         .then(user => {
 			user.password = undefined
-			res.status(201).json({data: user})
+			res.status(201).json(resOutput.jsonData(user))
 		})
         .catch(next)
 }
@@ -61,7 +63,7 @@ const update = (req, res, next) => {
 			return user.save(acceptedFields)
 				.then(() => {
 					user.password = undefined
-					res.status(200).json({data: user})
+					res.status(200).json(resOutput.jsonData(user))
 				})
 		})
 		.catch(next)
@@ -83,7 +85,7 @@ const changePasswordByUserId = (req, res, next) => {
 	_changePassword(req.params.userid, req.body.password)
 		.then(user => {
 			user.password = undefined
-			res.status(200).json({data: user})
+			res.status(200).json(resOutput.jsonData(user))
 		})
 }
 
@@ -95,7 +97,7 @@ const changePasswordByCurrentUserId = (req, res, next) => {
 	_changePassword(req.auth.id, req.body.password)
 		.then(user => {
 			user.password = undefined
-			res.status(200).json({data: user})
+			res.status(200).json(resOutput.jsonData(user))
 		})
 }
 

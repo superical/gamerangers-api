@@ -1,15 +1,14 @@
 const News = require('../models').News
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
+const resOutput = require('../helpers/responseOutput')
 
 const index = (req, res, next) => {
 	News.findAll({
         order: [['createdAt', 'DESC']]
     })
 		.then(newss => {
-			res.status(200).json({
-				data: newss.map(news => news)
-			})
+			res.status(200).json(resOutput.jsonData(newss))
 		})
 		.catch(err => next(err))
 }
@@ -20,7 +19,7 @@ const viewById = (req, res, next) => {
 			if(!news) throw new StatusCodeError('Cannot find news.', 404)
 			return news
 		})
-		.then(news => res.status(200).json({data: news}))
+		.then(news => res.status(200).json(resOutput.jsonData(news)))
 		.catch(next)
 }
 
@@ -32,7 +31,7 @@ const create = (req, res, next) => {
         headline: req.body.headline,
         content: req.body.content
     })
-        .then(news => res.status(201).json({date: news}))
+        .then(news => res.status(201).json(resOutput.jsonData(news)))
         .catch(next)
 }
 
@@ -49,7 +48,7 @@ const update = (req, res, next) => {
 			})
 			return news.save(acceptedParams)
 		})
-		.then(review => res.status(200).json({data: review}))
+		.then(news => res.status(200).json(resOutput.jsonData(news)))
 		.catch(next)
 }
 

@@ -1,3 +1,5 @@
+const offsetDateTime = require('../helpers/time').offsetDateTime
+
 const SearchFrequency = (db, DataType) => {
 	const Model = db.define('search', {
 			searchfreq_id: {
@@ -7,6 +9,18 @@ const SearchFrequency = (db, DataType) => {
 			},
 			game_id: {
 				type: DataType.INTEGER
+			},
+			createdAt: {
+				type: DataType.DATE,
+				get() {
+					return offsetDateTime(this.getDataValue('createdAt'))
+				},
+			},
+			updatedAt: {
+				type: DataType.DATE,
+				get() {
+					return offsetDateTime(this.getDataValue('updatedAt'))
+				},
 			}
 		},
 		{
