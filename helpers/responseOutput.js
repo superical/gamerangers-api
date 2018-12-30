@@ -21,11 +21,6 @@ const rearrangeData = modelObj => {
 	}
 }
 
-const nextData = (res, next, data) => {
-	res.locals.data = data
-	return next()
-}
-
 const jsonData = modelObj => {
 	return {
 		data: rearrangeData(modelObj)
@@ -33,6 +28,5 @@ const jsonData = modelObj => {
 }
 
 module.exports = {
-	jsonData,
-	nextData
+	jsonData
 }
