@@ -71,6 +71,13 @@ const update = (req, res, next) => {
 		.catch(next)
 }
 
+const setOrUpdateMainImage = (req, res, next) => {
+	const requiredParams = ['main_image']
+	validateParams(requiredParams)
+	// https://medium.com/technoetics/handling-file-upload-in-nodejs-7a4bb9f09a27
+	console.log(req.files)
+}
+
 const remove = (req, res, next) => {
 	Game.findOne({where: {game_id: req.params.gameid}})
 		.then(game => {
@@ -113,6 +120,7 @@ module.exports = {
 	viewById,
 	create,
 	update,
+	setOrUpdateMainImage,
 	remove,
 	trending
 }

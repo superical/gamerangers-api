@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Game Image Upload</title>
+</head>
+<body>
+<p>
+
+        <input type="file" name="main_image" id="fileinput" />
+        <button id="submitbtn">submit</button>
+
+
+</p>
+<script type="text/javascript">
+    document.querySelector('#submitbtn').addEventListener('click', evt => {
+    	const formdata = new FormData()
+        formdata.append('file', document.querySelector('#fileinput').files[0])
+        formdata.append('user', 'who is that')
+    	fetch('/games/2/image', {
+    		method: 'PUT',
+            body: formdata
+        }).then(res => console.log(res))
+    })
+</script>
+</body>
+</html>
