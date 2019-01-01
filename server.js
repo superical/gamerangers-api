@@ -35,16 +35,13 @@ app.get('/', function(req, res) {
 
 app.use('/', require('./routes/api'))
 
-app.use(function(err, req, res, next) {
-	console.error('name:', err.name, 'actual error:', err)
-	// console.error('Error:', err.message)
-	if (!err.statusCode) err.statusCode = 500
-	res.status(err.statusCode).json({error: err.message})
-});
+const errorHandlers = require('./middlewares/errorHandlers')
+app.use(errorHandlers.pageNotFound)
+app.use(errorHandlers.catchAll)
 
 const server = app.listen(port, host, function() {
 	const host = server.address().address
 	const port = server.address().port
 
-    console.log("API server is listening at http://%s:%s", host, port)
+    console.info("\t >>> GameRangers API server is listening at http://%s:%s", host, port)
 });
