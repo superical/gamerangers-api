@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `gamerangers` /*!40100 DEFAULT CHARACTER SET lati
 USE `gamerangers`;
 -- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
 --
--- Host: 192.168.99.100    Database: gamerangers
+-- Host: 127.0.0.1   Database: gamerangers
 -- ------------------------------------------------------
 -- Server version	5.7.21
 

@@ -115,16 +115,16 @@ INSERT INTO `search_frequency` (`searchfreq_id`, `game_id`, `createdAt`, `update
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `password`, `isAdmin`, `createdAt`, `updatedAt`) VALUES
-(1, 'V', 'Govin', 'Govin@gmail.com', 'Govin1234', 0, '2018-12-20 22:00:00', '2018-12-20 22:00:00'),
-(2, 'John', 'Smith', 'John@gmail.com', 'John3456', 0, '2018-12-20 22:10:00', '2018-12-20 22:10:00'),
-(3, 'Addem', 'Ismail', 'Addem@gmail.com', 'Addem7896', 0, '2018-12-20 22:12:00', '2018-12-20 22:12:00'),
-(4, 'Sally', 'Lim', 'Sally@gmail.com', 'Sally4569', 0, '2018-12-20 22:15:00', '2018-12-20 22:15:00'),
-(5, 'Edwin', 'Tan', 'edwin@gmail.com', 'Edwin7453', 0, '2018-12-20 22:17:00', '2018-12-20 22:17:00'),
-(6, 'Vasee', 'gharan ', 'Karan@gmail.com', 'Vasee4965', 0, '2018-12-20 22:19:00', '2018-12-20 22:19:00'),
-(7, 'Sam ', 'lim', 'Sam@gmail.com', 'Sam6877', 0, '2018-12-20 22:20:00', '2018-12-20 22:20:00'),
-(8, 'Kevin', 'wong', 'Kevin@gmail.com', 'Kevin7648', 0, '2018-12-20 22:22:00', '2018-12-20 22:22:00'),
-(9, 'Hamas', 'Bin', 'Hamas@gmail.com', 'Hamas9667', 0, '2018-12-20 22:24:00', '2018-12-20 22:24:00'),
-(10, 'Shahan', 'Suresh', 'Shahan@gmail.com', 'Shahan4548', 1, '2018-12-20 22:27:00', '2018-12-20 22:27:00');
+(1, 'V', 'Govin', 'Govin@gmail.com', '‌ab401ac3dafb35ef18670caaf637c4999388b99a14bb9a00dd5f5dfd23eca8f0', 0, '2018-12-20 22:00:00', '2018-12-20 22:00:00'),
+(2, 'John', 'Smith', 'John@gmail.com', '‌edd5579dce6d7495113b2ccc744bbccc56ea5e2af74e5acbfa80d3ba0fdde730', 0, '2018-12-20 22:10:00', '2018-12-20 22:10:00'),
+(3, 'Addem', 'Ismail', 'Addem@gmail.com', '‌2d89f0c7bc57bd54afaa7f112346eaab47a53533ad2288a51cfedfaae491f4ba', 0, '2018-12-20 22:12:00', '2018-12-20 22:12:00'),
+(4, 'Sally', 'Lim', 'Sally@gmail.com', '‌9d537c7a9c95eb36f5f5bf69896502920f2fde075e469cef8b7a9baec30f1f82', 0, '2018-12-20 22:15:00', '2018-12-20 22:15:00'),
+(5, 'Edwin', 'Tan', 'edwin@gmail.com', '‌6be9adcb6ef7fe7bb7c4221f92fa36ea71c7d8c04de881bd1dd08ed5d48e45a7', 0, '2018-12-20 22:17:00', '2018-12-20 22:17:00'),
+(6, 'Vasee', 'gharan ', 'Karan@gmail.com', '‌f7f9b95b807dff54396154f77cae082b537df747fb596456d6f02bfa7b0817c2', 0, '2018-12-20 22:19:00', '2018-12-20 22:19:00'),
+(7, 'Sam ', 'lim', 'Sam@gmail.com', '‌8583d94ebbcab89c6a0f6767739cfea8cd8d4e34dc587ced52531d5b3353c586', 0, '2018-12-20 22:20:00', '2018-12-20 22:20:00'),
+(8, 'Kevin', 'wong', 'Kevin@gmail.com', '‌b8080a7ef1a2ce8eed5046ce905384e38f067ab66d4dd39e596ff81a701186a3', 0, '2018-12-20 22:22:00', '2018-12-20 22:22:00'),
+(9, 'Hamas', 'Bin', 'Hamas@gmail.com', '‌099610139a19c280ab8e596106a2b0641e382b3999dc6f2bb3b364ea017b2c3c', 0, '2018-12-20 22:24:00', '2018-12-20 22:24:00'),
+(10, 'Shahan', 'Suresh', 'Shahan@gmail.com', '‌0ad610b5c90a9835dc3b5583971b677b0a5dafee4dcbf2432d88145e8bf057e7', 1, '2018-12-20 22:27:00', '2018-12-20 22:27:00');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
