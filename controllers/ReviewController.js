@@ -97,7 +97,7 @@ const create = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
-	if(req.body.game_id) throw new StatusCodeError('You are not allowed to modify game ID of a review. Delete and recreate the review if needed.', 400)
+	if(req.body.game_id || req.body.user_id) throw new StatusCodeError('You are not allowed to modify game or user ID of a review. Delete and recreate the review if needed.', 400)
 	const acceptedParams = ['content', 'rating']
 
 	Review.findOne({where: {review_id: req.params.reviewid}})
