@@ -1,3 +1,6 @@
+const path = require('path')
+const { URL } = require('url')
+const pathsConfig = require('../config/paths')
 const offsetDateTime = require('../helpers/time').offsetDateTime
 
 const Game = (db, DataType) => {
@@ -8,7 +11,10 @@ const Game = (db, DataType) => {
 			autoIncrement: true
 		},
 		main_image: {
-			type: DataType.STRING
+			type: DataType.STRING,
+			get() {
+				return (new URL(path.join(pathsConfig.GAME_IMAGES_DIR, this.getDataValue('main_image') || pathsConfig.GAMES_NO_IMAGE_FILE), pathsConfig.BASE_URL)).href
+			}
 		},
 		title: {
 			type: DataType.STRING
