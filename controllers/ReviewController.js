@@ -85,6 +85,8 @@ const create = (req, res, next) => {
 				.then(metaData => {
 					return {
 						...review.dataValues,
+						createdAt: review.createdAt,
+						updatedAt: review.updatedAt,
 						game: metaData[0],
 						user: metaData[1]
 					}
@@ -107,7 +109,19 @@ const update = (req, res, next) => {
 			})
 			return review.save(acceptedParams)
 		})
-		.then(review => res.status(200).json(resOutput.jsonData(review)))
+		.then(review => {
+			return Promise.all([review.getGame(), review.getUser({attributes: userAttributes})])
+				.then(metaData => {
+					return {
+						...review.dataValues,
+						createdAt: review.createdAt,
+						updatedAt: review.updatedAt,
+						game: metaData[0],
+						user: metaData[1]
+					}
+				})
+		})
+		.then(data => res.status(200).json(resOutput.jsonData(data)))
 		.catch(next)
 }
 

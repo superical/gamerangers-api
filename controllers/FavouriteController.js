@@ -87,6 +87,8 @@ const _createReplace = (userId, gameId) =>
 				.then(metaData => {
 					return {
 						...favourite.dataValues,
+						createdAt: favourite.createdAt,
+						updatedAt: favourite.updatedAt,
 						game: metaData[0],
 						user: metaData[1]
 					}
