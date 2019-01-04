@@ -13,7 +13,7 @@ router.get('/testupload', (req, res) => {
 
 router.get('/:gameid/reviews', ReviewController.viewByGameId)
 router.get('/:gameid', GameController.viewById)
-router.post('/', auth.required, GameController.create)
+router.post('/', auth.adminOnly, GameController.create)
 router.patch('/:gameid', auth.adminOnly, GameController.update)
 
 router.put('/:gameid/image', auth.adminOnly, require('body-parser').text({limit: '5mb', type: 'image/*'}), auth.optional, GameController.setOrUpdateMainImage)
