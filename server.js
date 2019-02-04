@@ -20,6 +20,7 @@ app.use(bodyparser.urlencoded({extended: false}))
 app.use(require('./middlewares/cors'))
 
 app.engine('html', require('mustache-express')())
+app.engine('mustache', require('mustache-express')())
 app.set('view engine', 'mustache')
 app.set('views', __dirname + '/public')
 
@@ -29,9 +30,7 @@ passport.use(passportConfig.localStrategy)
 passport.use(passportConfig.googleStrategy)
 app.use(passport.initialize())
 
-app.get('/', function(req, res) {
-    res.send('Welcome to GameRangers')
-})
+app.use('/', require('./routes'))
 
 app.use('/api', require('./routes/api'))
 

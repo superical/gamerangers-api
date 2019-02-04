@@ -1,0 +1,28 @@
+{{> templates/header}}
+<link rel="stylesheet" href="css/signup.css">
+<div class="row">
+    <div class="col-sm-12">
+        <div id="login-box">
+            <div class="left-box">
+                <h1> Sign Up</h1>
+                <form id="signupForm">
+                    <input type="text" name="firstname" placeholder="First Name"/>
+                    <input type="text" name="lastname" placeholder="Last Name"/>
+                    <input type="text" name="email" placeholder="Email"/>
+                    <input type="password" name="password" placeholder="Password"/>
+                    <button type="submit" class="submit">Sign Up</button>
+                </form>
+            </div>
+            <div class="right-box">
+                <span class="signinwith"> Also Sign in with<br/>Social Network </span>
+
+                <button class="social google">Log in with Google Account</button>
+                <button class="social email-login">Log in with Email</button>
+
+            </div>
+            <div class="or">OR</div>
+        </div>
+    </div>
+</div>
+<script src="js/registration.js" defer></script>
+{{> templates/footer}}

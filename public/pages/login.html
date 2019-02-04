@@ -1,0 +1,31 @@
+{{> templates/header}}
+<link rel="stylesheet" href="css/signup.css">
+<div class="row">
+    <div class="col-sm-12">
+
+        <div id="login-box">
+            <div class="left-box">
+                <h1>Login</h1>
+                <div id="message" style="color: red; font-size: 12px; font-weight: bold;"></div>
+                <form id="loginForm">
+                    <input type="text" id="email" name="email" placeholder="Email"/>
+                    <input type="password" id="password" name="password" placeholder="Password"/>
+
+                    <button class="submit">Log in</button>
+                </form>
+                <p class="signin-goback">
+                    <a href="javascript:history.go(-1)">
+                        < Go back to site</a></p></div>
+            <div class="right-box">
+                <span class="signinwith">Sign up for an account</span>
+
+                <button class="social google">Sign up with Google Account</button>
+                <button class="social email-login">Sign up with Email</button>
+
+            </div>
+            <div class="or">OR</div>
+        </div>
+    </div>
+</div>
+<script src="js/login.js" defer></script>
+{{> templates/footer}}

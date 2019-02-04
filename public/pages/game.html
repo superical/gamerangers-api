@@ -1,0 +1,63 @@
+{{> templates/header}}
+<div class="game-main-image"><img id="contentGameImage" src=""></div>
+
+<h1 class="headerheading" id="contentGameTitle"></h1>
+<div class="game-content-container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="game-info-box">
+                <h3 class="game-info-heading">Developer</h3>
+                <p id="contentGameDeveloper"></p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="game-info-box center">
+                <h3 class="game-info-heading">Release Date</h3>
+                <p id="contentReleaseDate"></p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="game-info-box">
+                <h3 class="game-info-heading right">Overall Rating</h3>
+                <p class="right" id="contentOverallRating">-</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-md-12">
+            <iframe id="contentGameVideo" width="675" height="380" src="" frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+        <div class="col-lg-5 col-md-12">
+            <h5>Description</h5>
+            <p id="contentDescription"></p>
+            <div>
+                <h5>Reviews</h5>
+                <div>
+                    <form id='reviewForm' method="POST">
+                        <div class="form-group">
+                            <div class="rated-box">Rating:
+                                <div class="rated-star" id="ratingVal">0</div>
+                            </div>
+                            <input type="range" class="custom-range" value="0" min="0" max="5" name="ratingSlider"
+                                   id="ratingSlider">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" id="reviewTextarea" name="reviewTextarea" rows="3"
+                                      placeholder="Write your review..."></textarea>
+                        </div>
+                        <button type="submit" style="width: 100%; margin-bottom: 30px;" class="btn btn-outline-primary">
+                            Submit Review
+                        </button>
+                    </form>
+                </div>
+                <a id="reviews"></a>
+                <div id='reviewsContainer'>Loading...</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="js/game-detail.js"></script>
+{{> templates/footer}}

@@ -1,0 +1,144 @@
+html, body{
+    height: 100% !important;
+    margin:  0;
+    padding: 0;
+    background-image: url('../images/bg-round.png');
+}
+
+.game-display {
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.game-display img {
+    transition: all .5s ease-in;
+}
+
+.game-display img:hover {
+    opacity: 0.8;
+}
+
+h2.mainheading {
+  font-family: arial; 
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 5px;
+  padding-left: 20px;
+  color: #333333;
+}
+h1.headerheading {
+    font-family: arial; 
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    padding-left: 20px;
+    color: #c70000;
+}
+
+.main-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow-x: hidden;
+    min-height: 100% !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar-login {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 3px;
+    font-size: 12px;
+}
+
+.content-container {
+    padding-top: 10px;
+    height: 100% !important;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-footer {
+    background-color: #333333;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+}
+p{font-family: Georgia, 'Times New Roman', Times, serif; text-align:left} 
+
+div.game-info-box {
+    margin: auto;
+}
+
+h3.game-info-heading {
+    font-size: 16px;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.game-content-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 5px 20px;
+}
+
+.game-content-video-reviews {
+    margin-top: 20px;
+}
+
+.game-main-image {
+    height: 400px;
+    overflow: hidden;
+}
+
+.game-main-image > img {
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto;
+    width: 100%;
+    
+}
+
+.rated-star {
+    background: url('../images/icon-star.png');
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    margin-left: 5px;
+}
+
+.rated-box {
+    display: flex;
+    align-content: center;
+}
+
+.review-card {
+    margin: 10px 0;
+}
+
+.carousel-caption p {
+    text-align: center;
+}
+
+.padding-horizontal {
+    padding-left: 20px;
+    padding-right: 20px;
+}
