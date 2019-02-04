@@ -33,7 +33,7 @@ app.get('/', function(req, res) {
     res.send('Welcome to GameRangers')
 })
 
-app.use('/', require('./routes/api'))
+app.use('/api', require('./routes/api'))
 
 const errorHandlers = require('./middlewares/errorHandlers')
 app.use(errorHandlers.pageNotFound)
