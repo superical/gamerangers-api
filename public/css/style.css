@@ -69,7 +69,7 @@ h1.headerheading {
     color: white;
     font-size: 14px;
 }
-p{font-family: Georgia, 'Times New Roman', Times, serif; text-align:left} 
+
 
 div.game-info-box {
     margin: auto;
@@ -141,4 +141,9 @@ h3.game-info-heading {
 .padding-horizontal {
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.loggedinas-text {
+    font-size: 12px;
+    margin-top: 3px;
 }

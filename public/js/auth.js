@@ -11,6 +11,10 @@ const getAuthInfo = () => {
     return JSON.parse(sessionStorage.getItem('auth'))
 }
 
+const saveAuthObjToSession = authObj => sessionStorage.setItem('auth', JSON.stringify(authObj))
+
+const logout = () => sessionStorage.removeItem('auth')
+
 const authenticateUser = (email, password) => {
     const bodyContent = {
         email: email,
@@ -26,7 +30,7 @@ const authenticateUser = (email, password) => {
     .then(res => res.json())
     .then(data => {
         if(data.error) throw new Error(data.error)
-        sessionStorage.setItem('auth', JSON.stringify(data.authentication))
+        saveAuthObjToSession(data.authentication)
         return data.authentication
     })
 }
@@ -34,5 +38,7 @@ const authenticateUser = (email, password) => {
 const Authentication = {
     isAuthenticated,
     getAuthInfo,
-    authenticateUser
+    authenticateUser,
+	saveAuthObjToSession,
+    logout
 }

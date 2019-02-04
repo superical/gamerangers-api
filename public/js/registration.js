@@ -46,3 +46,24 @@ signupForm.addEventListener('submit', function(e) {
         })
         .catch(err => alert('An error has occurred:\n' + err.message))
 })
+
+const performPostSuccessLogin = () => {
+	alert('Login successfully!\nWe will bring you back to our homepage now.')
+	window.location.href = '/home.html'
+}
+
+window.authCallback = authObj => {
+	if(authObj.token) {
+		Authentication.saveAuthObjToSession(authObj)
+		performPostSuccessLogin()
+	} else {
+		document.getElementById('message').innerHTML = 'Error while signing in through Google.'
+	}
+}
+
+document.querySelector('#googlelogin').addEventListener('click', () => {
+	window.open('/api/auth/google')
+})
+document.querySelector('#googlesignup').addEventListener('click', () => {
+	window.open('/api/auth/google')
+})
