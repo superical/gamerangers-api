@@ -43,6 +43,7 @@ const User = (db, DataType) => {
 		return {
 			id: this.getDataValue('user_id'),
 			email: this.getDataValue('email'),
+			isAdmin: this.getDataValue('isAdmin'),
 			token: jwt.sign({
 				id: this.getDataValue('user_id'),
 				email: this.getDataValue('email'),
