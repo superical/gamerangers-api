@@ -102,6 +102,25 @@ h3.game-info-heading {
 .game-main-image {
     height: 400px;
     overflow: hidden;
+    position: relative;
+}
+
+.game-image-upload-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(102, 102, 102, 0.8);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.game-image-upload-container:hover {
+    opacity: 1;
 }
 
 .game-main-image > img {
@@ -110,6 +129,13 @@ h3.game-info-heading {
     margin-right: auto;
     width: 100%;
     
+}
+
+.game-image-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .rated-star {

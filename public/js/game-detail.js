@@ -108,9 +108,55 @@ const retrieveGame = gameId => {
         })
 }
 
-
+const gameUploadImageForm = document.querySelector('#gameUploadImageForm')
+gameUploadImageForm.addEventListener('submit', function(e) {
+    e.preventDefault()
+    const gameId = getGameId()
+    if(!gameId) {
+        alert('Invalid game ID.')
+        return
+    }
+    if(this.elements['game_image_fileinput'].files.length === 0) {
+        alert('Please select an image file first.')
+        return
+    }
+	const fr = new FileReader()
+	fr.addEventListener('load', e => {
+		const pattern = /^data:(image\/.+);base64,/i
+		const matches = e.target.result.match(pattern)
+		if(matches === null || matches.length < 2) {
+			alert('You have uploaded an invalid image file.')
+			return
+		}
+		const contentType = matches[1]
+		const imageData = e.target.result.replace(pattern, '')
+		fetch(`${Configuration.apiUrl}/games/${gameId}/image`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': contentType,
+				'Authorization': `Bearer ${Authentication.getAuthInfo().token}`
+			},
+			body: imageData
+		})
+			.then(res => res.json())
+			.then(data => {
+			    if(data.error) throw new Error(data.error)
+				const contentGameImage = document.querySelector('#contentGameImage')
+				contentGameImage.src = data.data.main_image
+				alert('Game image uploaded successfully!')
+                window.location.reload()
+            })
+            .catch(err => alert('Error response from server\n' + err))
+	})
+	fr.readAsDataURL(this.elements['game_image_fileinput'].files[0])
+})
 
 window.addEventListener('load', function(e) {
     populateReviews(getGameId())
     updateGameContent(getGameId())
+    console.log(Authentication.getAuthInfo())
+    if(Authentication.getAuthInfo().isAdmin) {
+	    const gameImageUploadContainer = document.querySelector('#gameImageUploadContainer')
+	    gameImageUploadContainer.style.display = 'flex'
+    }
 })

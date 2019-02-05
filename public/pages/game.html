@@ -1,5 +1,17 @@
 {{> templates/header}}
-<div class="game-main-image"><img id="contentGameImage" src=""></div>
+<div class="game-main-image">
+    <div class="game-image-upload-container" id="gameImageUploadContainer" style="display: none;">
+        <h3>Upload a new image (Admin Only)</h3>
+        <form class="game-image-form" id="gameUploadImageForm">
+            <div class="form-group" style="display:flex; margin-top:15px;">
+                <label for="game_image_fileinput" style="width: 180px;">Game Image File:</label>
+                <input type="file" class="form-control-file" id="game_image_fileinput" name="game_image_fileinput">
+            </div>
+            <button type="submit" class="btn btn-danger">Upload Game Image</button>
+        </form>
+    </div>
+    <img id="contentGameImage" src="">
+</div>
 
 <h1 class="headerheading" id="contentGameTitle"></h1>
 <div class="game-content-container">
