@@ -1,3 +1,33 @@
+const updateAuthenticatedOnlyElements = (displayMode = 'flex') => {
+	const showOnlyIfLoggedOuts = document.querySelectorAll('.showOnlyIfLoggedOut')
+	const showOnlyIfLoggedIns = document.querySelectorAll('.showOnlyIfLoggedIn')
+	showOnlyIfLoggedIns.forEach(showOnlyIfLoggedIn => {
+		if(Authentication.isAuthenticated()) {
+			showOnlyIfLoggedIn.style.display = displayMode
+		} else {
+			showOnlyIfLoggedIn.style.display = 'none'
+		}
+	})
+	showOnlyIfLoggedOuts.forEach(showOnlyIfLoggedOut => {
+		if(!Authentication.isAuthenticated()) {
+			showOnlyIfLoggedOut.style.display = displayMode
+		} else {
+			showOnlyIfLoggedOut.style.display = 'none'
+		}
+	})
+}
+
+const updateAuthenticatedAdminOnlyElements = (displayMode = 'flex') => {
+	const showOnlyIfAdmins = document.querySelectorAll('.showOnlyIfAdmin')
+	showOnlyIfAdmins.forEach(showOnlyIfAdmin => {
+		if(Authentication.isAuthenticated() && Authentication.getAuthInfo().isAdmin === true) {
+			showOnlyIfAdmin.style.display = displayMode
+		} else {
+			showOnlyIfAdmin.style.display = 'none'
+		}
+	})
+}
+
 window.addEventListener('load', function(e) {
 	const navMenuLogin = document.querySelector('#navMenuLogin')
 	const navMenuLoggedAs = document.querySelector('#navMenuLoggedAs')
@@ -7,8 +37,9 @@ window.addEventListener('load', function(e) {
 			.then(res => res.json())
 			.then(user => {
 				loggedAsText.innerHTML = `Logged in as ${user.data.first_name} ${user.data.last_name}`
-				navMenuLogin.style.display = 'none'
-				navMenuLoggedAs.style.display = 'block'
+				if(Authentication.getAuthInfo().isAdmin === true)
+					loggedAsText.innerHTML += ' [ADMINISTRATOR]'
+				updateAuthenticatedOnlyElements()
 			})
 			.catch(err => {
 				Authentication.logout()
@@ -19,6 +50,7 @@ window.addEventListener('load', function(e) {
 		navMenuLogin.style.display = 'block'
 		navMenuLoggedAs.style.display = 'none'
 	}
+	updateAuthenticatedAdminOnlyElements()
 })
 
 const logoutLinks = document.querySelectorAll('.logoutLink')

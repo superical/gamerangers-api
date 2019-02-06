@@ -54,7 +54,7 @@
                     <a class="nav-link" href="news.html" >Latest News</a>
             </li>
 
-            <li class="nav-item dropdown" id="navMenuLogin" style="display: none;">
+            <li class="nav-item dropdown showOnlyIfLoggedOut" id="navMenuLogin" style="display: none;">
               <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Login
               </a>
@@ -68,8 +68,8 @@
               </div>
             </li>
 
-            <li class="nav-item" id="navMenuLoggedAs" style="display: none;">
-                <div class="loggedinas-text" style="display:flex;"><a class="nav-link" href="profile.html" id="loggedAsText">...</a><a class="nav-link logoutLink" style="padding-left: 0;" href="#">(Logout)</a></div>
+            <li class="nav-item showOnlyIfLoggedIn" id="navMenuLoggedAs" style="display: none;">
+                <div class="loggedinas-text" style="display:flex;"><a class="nav-link" href="profile.html" id="loggedAsText">Loading...</a><a class="nav-link logoutLink" style="padding-left: 0;" href="#">(Logout)</a></div>
             </li>
 
           </ul>

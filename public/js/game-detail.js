@@ -155,8 +155,4 @@ window.addEventListener('load', function(e) {
     populateReviews(getGameId())
     updateGameContent(getGameId())
     console.log(Authentication.getAuthInfo())
-    if(Authentication.getAuthInfo().isAdmin) {
-	    const gameImageUploadContainer = document.querySelector('#gameImageUploadContainer')
-	    gameImageUploadContainer.style.display = 'flex'
-    }
 })
