@@ -14,6 +14,7 @@ const googleAuthCallback = (req, res, next) => {
 			res.render('auth-callback.html', {
 				user_id: authObj.id,
 				email: authObj.email,
+				isAdmin: authObj.isAdmin,
 				token: authObj.token
 			})
 			//return res.status(200).json({authentication: passportUser.getAuthObject()})
