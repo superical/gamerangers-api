@@ -1,4 +1,6 @@
 const sha256 = require('sha256')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 const User = require('../models').User
 const StatusCodeError = require('../helpers/StatusCodeError')
 const validateParams = require('../helpers/validateRequestParams')
@@ -18,7 +20,6 @@ const index = (req, res, next) => {
 
 const currentUser = (req, res, next) => {
 	User.findOne({where: {
-		email: req.auth.email,
 		user_id: req.auth.id
 	}})
 		.then(user => {
@@ -56,6 +57,26 @@ const update = (req, res, next) => {
 	User.findOne({where: {user_id: req.params.userid}})
 		.then(user => {
 			if(!user) throw new StatusCodeError('Cannot find account.', 404)
+			return user
+		})
+		.then(user => {
+			if(req.body.email) {
+				return User.findOne({
+					where: {
+						email: req.body.email,
+						user_id: {
+							[Op.ne]: user.user_id
+						}
+					}
+				})
+					.then(existingUser => {
+						if(existingUser) throw new StatusCodeError('Email address is already used by another account.', 409)
+						return user
+					})
+			} else return user
+
+		})
+		.then(user => {
 			Object.keys(req.body).forEach(paramName => {
 				if(acceptedFields.indexOf(paramName) > -1)
 					user[paramName] = req.body[paramName]
