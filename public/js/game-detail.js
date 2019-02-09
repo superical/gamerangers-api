@@ -151,8 +151,47 @@ gameUploadImageForm.addEventListener('submit', function(e) {
 	fr.readAsDataURL(this.elements['game_image_fileinput'].files[0])
 })
 
+const initAddGameToFavourites = gameId => {
+    const addToFavBtn = document.querySelector('#addToFavBtn')
+    Utils.fetchAuthApi(`${Configuration.apiUrl}/users/current/favourites`, 'GET')
+        .then(res => res.json())
+        .then(resData => {
+            if(resData.error) throw new Error(resData.error)
+            const favsList = resData.data
+            for(let i=0; i<favsList.length; i++) {
+                const fav = favsList[i]
+                if(fav.game_id === parseInt(gameId)) {
+                    return true
+                }
+            }
+            return false
+        })
+        .then(isFavAlreadyAdded => {
+            if(isFavAlreadyAdded) {
+                addToFavBtn.innerHTML = 'Game is already added to Favourites'
+                addToFavBtn.classList.add('disabled')
+            } else {
+                addToFavBtn.addEventListener('click', function(e) {
+                    Utils.fetchAuthApi(`${Configuration.apiUrl}/users/current/favourites/${gameId}`, 'PUT')
+                        .then(res => res.json())
+                        .then(resData => {
+                            if(resData.error) throw new Error(resData.error)
+                            addToFavBtn.innerHTML = 'Added to Favourites!'
+                            addToFavBtn.classList.add('disabled')
+                        })
+                        .catch(err => alert(err))
+                })
+            }
+        })
+        .catch(err => {
+            addToFavBtn.addEventListener('click', function(e) {
+                alert('You need to log in to add to Favourites.')
+            })
+        })
+}
+
 window.addEventListener('load', function(e) {
     populateReviews(getGameId())
     updateGameContent(getGameId())
-    console.log(Authentication.getAuthInfo())
+    initAddGameToFavourites(getGameId())
 })

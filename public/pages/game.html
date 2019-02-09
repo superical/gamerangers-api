@@ -1,5 +1,5 @@
 {{> templates/header}}
-<div class="game-main-image">
+<div class="game-main-image" style="margin-top: -10px;">
     <div class="game-image-upload-container showOnlyIfAdmin" id="gameImageUploadContainer" style="display: none;">
         <h3>Upload a new image (Admin Only)</h3>
         <form class="game-image-form" id="gameUploadImageForm">
@@ -44,6 +44,9 @@
         <div class="col-lg-5 col-md-12">
             <h5>Description</h5>
             <p id="contentDescription"></p>
+            <div style="padding-bottom:15px;">
+                <button type="button" class="btn btn-outline-danger" id="addToFavBtn">Add Game To Favourites</button>
+            </div>
             <div>
                 <h5>Reviews</h5>
                 <div>

@@ -35,6 +35,25 @@ const updateRandomGames = limit => {
         })
 }
 
+const listTopTrendingGames = limit => {
+    retrieveTrendingGames(limit)
+        .then(games => {
+            const trendingGamesList = document.querySelector('#trendingGamesList')
+            let trendingGamesListHtml = ''
+            games.forEach(gameData => {
+                trendingGamesListHtml += `
+                    <li><a href="game.html?id=${gameData.game_id}">${gameData.game.title}</a></li>
+                `
+            })
+            trendingGamesList.innerHTML = trendingGamesListHtml
+        })
+        .catch(err => {
+            const trendingGamesList = document.querySelector('#trendingGamesList')
+            trendingGamesList.innerHTML = `<li>Error fetching trending games.</li>`
+        })
+}
+
 window.addEventListener('load', function(e) {
     updateRandomGames(4)
+    listTopTrendingGames(10)
 })

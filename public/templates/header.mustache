@@ -30,13 +30,13 @@
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item" data-page="home.html">
               <a class="nav-link" href="home.html">Home<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="Profile.html">Profile</a>
+            <li class="nav-item" data-page="profile.html">
+              <a class="nav-link" href="profile.html">Profile</a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" data-page="allgames.html|trending.html|game.html">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Games
               </a>
@@ -44,17 +44,17 @@
                 <a class="dropdown-item" href="#"></a>
                 <a class="dropdown-item" href="allgames.html">Latest Games</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="favourites.html">Favourite Games</a>
+                <a class="dropdown-item" href="trending.html">Trending Now</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="trending.html" >Trending Now</a>
+            <li class="nav-item" data-page="favourites.html">
+              <a class="nav-link" href="favourites.html" >Favourite Games</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-page="news.html">
                     <a class="nav-link" href="news.html" >Latest News</a>
             </li>
 
-            <li class="nav-item dropdown showOnlyIfLoggedOut" id="navMenuLogin" style="display: none;">
+            <li class="nav-item dropdown showOnlyIfLoggedOut" data-page="login.html|signup.html" id="navMenuLogin" style="display: none;">
               <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Login
               </a>
@@ -73,17 +73,17 @@
             </li>
 
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <form class="form-inline my-2 my-lg-0" id="searchForm" method="GET" action="./search.html">
+            <input name="title" id="searchBox" class="form-control form-control-sm mr-sm-2 search-textbox" type="search" placeholder="Search" aria-label="Search">
+            <div class="form-group">
+              <select class="form-control form-control-sm search-developer-box" name="developer">
+                <option value=''>All Developers</option>
+                <option value='Epic Game'>Epic Game</option>
+                <option value='EA SPORTS'>EA Sports</option>
+              </select>
+            </div>
+            <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" style="margin-left: 10px;" type="submit">Search</button>
           </form>
         </div>
       </nav>
-
-        <div class="row">
-          <div class="col-sm">
-              <h2 class="mainheading">Be A Game RANGERRRR</h2>
-          </div>
-        </div>
-    
       <div class="content-container">

@@ -1,21 +1,24 @@
 {{> templates/header}}
+<link rel="stylesheet" href="css/profile.css">
 <div class="padding-horizontal">
     <h1 class="headerheading">My Profile</h1>
-    <p class="manu">
-        Profile
-        <br>
-        Name <b>Govin</b>
-        </br>
-        <br>
-        Age <b>18</b>
-        </br>
-        <br>
-        Favourite Genre <b>Football</b>
-        </br>
-        <br>
-        Gaming console <b>PS4</b>
-        </br>
-    </p>
+    <div class="profile-container" id="profileContainer" style="display: none;">
+      <div class="profile-card">
+        <div>
+          <img src="images/profilrepic.jpg" alt="">
+        </div>
+        <div>
+            <h2>Name: <span id="profileName"></span></h2>
+            <p>
+            <h5> Email: <span id="profileEmail"></span> </h5>
+            <h6> Is Administrator:<br/><span id="profileIsAdmin"></span> </h6>
+          </p>
+            <div class="sm">
+              <a href="changepassword.html"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Change Password</button></a>
+            </div>
+        </div>
+      </div>
+    </div>
 </div>
-
+<script src="js/profile.js"></script>
 {{> templates/footer}}
