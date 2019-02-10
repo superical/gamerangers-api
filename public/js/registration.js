@@ -37,7 +37,7 @@ signupForm.addEventListener('submit', function(e) {
                 .then(authData => {
                     if(authData.token) {
                         alert('You have registered successfully!\nWe will redirect you to our homepage now.')
-                        window.location.href = 'nav.html'
+                        window.location.href = '/home.html'
                     } else {
                         throw new Error('Unable to authenticate new account.')
                     }
