@@ -29,22 +29,23 @@ signupForm.addEventListener('submit', function(e) {
         email: formElements['email'].value.trim(),
         password: formElements['password'].value.trim()
     }
-    Utils.fetchApi(`${Configuration.apiUrl}/users`, 'POST', bodyContent)
-        .then(res => res.json())
-        .then(resData => {
-            if(resData.error) throw new Error(resData.error)
-            return Authentication.authenticateUser(formElements['email'].value.trim(), formElements['password'].value.trim())
-                .then(authData => {
-                    if(authData.token) {
-                        alert('You have registered successfully!\nWe will redirect you to our homepage now.')
-                        window.location.href = '/home.html'
-                    } else {
-                        throw new Error('Unable to authenticate new account.')
-                    }
-                })
-            
-        })
-        .catch(err => alert('An error has occurred:\n' + err.message))
+	const req = new XMLHttpRequest()
+	req.open('POST', `${Configuration.apiUrl}/users`)
+	req.setRequestHeader('Content-Type', 'application/json')
+	req.onload = function() {
+    	const resData = JSON.parse(req.response)
+		if(resData.error) alert('An error has occurred:\n' + resData.error)
+		return Authentication.authenticateUser(formElements['email'].value.trim(), formElements['password'].value.trim())
+			.then(authData => {
+				if(authData.token) {
+					alert('You have registered successfully!\nWe will redirect you to our homepage now.')
+					window.location.href = '/home.html'
+				} else {
+					throw new Error('Unable to authenticate new account.')
+				}
+			})
+	}
+	req.send(JSON.stringify(bodyContent))
 })
 
 const performPostSuccessLogin = () => {
