@@ -20,19 +20,13 @@ const authenticateUser = (email, password) => {
         email: email,
         password: password
     }
-    return fetch(`${Configuration.apiUrl}/auth/login`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(bodyContent)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.error) throw new Error(data.error)
-        saveAuthObjToSession(data.authentication)
-        return data.authentication
-    })
+    return Utils.fetchApi(`${Configuration.apiUrl}/auth/login`, 'POST', bodyContent)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) throw new Error(data.error)
+            saveAuthObjToSession(data.authentication)
+            return data.authentication
+        })
 }
 
 const Authentication = {

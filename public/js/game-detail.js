@@ -130,14 +130,9 @@ gameUploadImageForm.addEventListener('submit', function(e) {
 		}
 		const contentType = matches[1]
 		const imageData = e.target.result.replace(pattern, '')
-		fetch(`${Configuration.apiUrl}/games/${gameId}/image`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': contentType,
-				'Authorization': `Bearer ${Authentication.getAuthInfo().token}`
-			},
-			body: imageData
-		})
+        Utils.fetchAuthApi(`${Configuration.apiUrl}/games/${gameId}/image`, 'PUT', imageData, {
+	        'Content-Type': contentType
+        })
 			.then(res => res.json())
 			.then(data => {
 			    if(data.error) throw new Error(data.error)
